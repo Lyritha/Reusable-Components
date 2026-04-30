@@ -1,12 +1,8 @@
-﻿using NUnit;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-
+﻿using System.Collections.Generic;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class BreakableWall : MonoBehaviour
 {
@@ -84,6 +80,12 @@ public class BreakableWall : MonoBehaviour
         supportPairs.Clear();
         colorCache.Clear();
 
+        SceneView sceneView = SceneView.lastActiveSceneView;
+        if (sceneView == null) return;
+
+        Camera cam = sceneView.camera;
+        Vector3 camPos = cam.transform.position;
+
         foreach (BreakableWallSegment segA in brokenPieces) 
         {
             if (segA == null) continue;
@@ -97,8 +99,12 @@ public class BreakableWall : MonoBehaviour
             }
 
             // create spheres for all segments
-            Handles.color = color;
-            Handles.SphereHandleCap(0, segA.transform.position, Quaternion.identity, 0.08f, EventType.Repaint);
+            float dist = Vector3.Distance(camPos, segA.transform.position);
+            if (dist < 15)
+            {
+                Handles.color = color;
+                Handles.SphereHandleCap(0, segA.transform.position, Quaternion.identity, 0.05f, EventType.Repaint);
+            }
 
             foreach (BreakableWallSegment segB in segA.NeigborsSupportingMe)
             {
@@ -113,18 +119,27 @@ public class BreakableWall : MonoBehaviour
 
         foreach ((BreakableWallSegment, BreakableWallSegment) pair in supportPairs)
         {
+            if (pair.Item1 == null || pair.Item2 == null) continue;
+
             Vector3 start = pair.Item1.transform.position;
             Vector3 end = pair.Item2.transform.position;
             Vector3 mid = (start + end) * 0.5f;
 
-            // first half (start → midpoint)
+            float dist = Vector3.Distance(camPos, mid);
+            float sqrLen = (end - start).sqrMagnitude;
+
+            // Medium distance → hide very short connections
+            if (dist > 5f && sqrLen < 0.3f) continue;
+            if (dist > 10f) continue;
+
+            // --- Draw two-color line ---
             Handles.color = colorCache[pair.Item1];
             Handles.DrawLine(start, mid);
 
-            // second half (midpoint → end)
             Handles.color = colorCache[pair.Item2];
             Handles.DrawLine(mid, end);
         }
+
 
         Handles.zTest = UnityEngine.Rendering.CompareFunction.LessEqual;
     }
