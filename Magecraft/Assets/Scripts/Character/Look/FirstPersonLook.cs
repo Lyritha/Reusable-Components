@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class CharacterLookFirstPerson : MonoBehaviour, ICharacterLook
+public class FirstPersonLook : MonoBehaviour, ICharacterLook
 {
     [SerializeField]
     private float yawSensitivity = 0.5f;

@@ -2,7 +2,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
-public class CharacterJumpMultiple : MonoBehaviour, ICharacterJump
+public class MultiJumpController : MonoBehaviour, ICharacterJump
 {
     [SerializeField]
     private float jumpImpulse = 180f;

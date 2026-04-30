@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class CharacterJumpSingle : MonoBehaviour, ICharacterJump
+public class JumpController : MonoBehaviour, ICharacterJump
 {
     [SerializeField]
     private float jumpImpulse = 180f;

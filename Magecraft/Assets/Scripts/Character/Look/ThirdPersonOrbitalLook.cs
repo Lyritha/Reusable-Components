@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CharacterFreeLookThirdPerson : MonoBehaviour, ICharacterLook
+public class ThirdPersonOrbitalLook : MonoBehaviour, ICharacterLook
 {
     [SerializeField]
     private float yawSensitivity = 0.5f;

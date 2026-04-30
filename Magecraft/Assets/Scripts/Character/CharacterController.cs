@@ -41,8 +41,8 @@ public class CharacterController : MonoBehaviour
     {
         if (characterLook == null) return;
 
-        bool switchingToFreeLook = characterLook is CharacterLookFirstPerson;
-        Type nextType = switchingToFreeLook ? typeof(CharacterFreeLookThirdPerson) : typeof(CharacterLookFirstPerson);
+        bool switchingToFreeLook = characterLook is FirstPersonLook;
+        Type nextType = switchingToFreeLook ? typeof(ThirdPersonOrbitalLook) : typeof(FirstPersonLook);
 
         Destroy((Component)characterLook);
         characterLook = (ICharacterLook)gameObject.AddComponent(nextType);

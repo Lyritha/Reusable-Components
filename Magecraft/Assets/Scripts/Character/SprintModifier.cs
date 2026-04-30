@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CharacterSprint : MonoBehaviour, ICharacterSprint
+public class SprintModifier : MonoBehaviour, ICharacterSprint
 {
     [SerializeField]
     private float sprintMult = 2;
@@ -10,8 +10,7 @@ public class CharacterSprint : MonoBehaviour, ICharacterSprint
     public void OnSprint(bool isSprinting)
     {
         // grab character move, modify move speed, and set it back to the character move
-        ICharacterMove characterMove = GetComponent<ICharacterMove>();
-        if (characterMove == null) return;
+        if (!TryGetComponent<ICharacterMove>(out var characterMove)) return;
 
         if (isSprinting) {
             originalMoveSpeed = characterMove.MoveSpeed;

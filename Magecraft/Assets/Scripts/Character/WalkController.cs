@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
-public class CharacterWalk : MonoBehaviour, ICharacterMove
+public class WalkController : MonoBehaviour, ICharacterMove
 {
     [SerializeField]
     private Vector2 moveSpeed = new(2, 3f); // m/s
