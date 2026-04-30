@@ -1,8 +1,12 @@
+﻿using NUnit;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class BreakableWall : MonoBehaviour
 {
@@ -65,5 +69,68 @@ public class BreakableWall : MonoBehaviour
                 EditorUtility.SetDirty(seg);
     #endif
     }
+
+    // visualize support relationships in editor
+#if UNITY_EDITOR
+    private readonly HashSet<(BreakableWallSegment, BreakableWallSegment)> supportPairs = new();
+    private readonly Dictionary<BreakableWallSegment, Color> colorCache = new();
+
+    private void OnDrawGizmosSelected()
+    {
+        // Only draw if THIS object is the one selected
+        if (Selection.activeTransform != transform) return;
+
+        Handles.zTest = UnityEngine.Rendering.CompareFunction.Always;
+        supportPairs.Clear();
+        colorCache.Clear();
+
+        foreach (BreakableWallSegment segA in brokenPieces) 
+        {
+            if (segA == null) continue;
+
+            // precompute colors
+            if (!colorCache.TryGetValue(segA, out Color color))
+            {
+                float hue = GetRandomHueUtility.GetFromId(segA.GetInstanceID());
+                color = Color.HSVToRGB(hue, 1f, 1f);
+                colorCache.Add(segA, color);
+            }
+
+            // create spheres for all segments
+            Handles.color = color;
+            Handles.SphereHandleCap(0, segA.transform.position, Quaternion.identity, 0.08f, EventType.Repaint);
+
+            foreach (BreakableWallSegment segB in segA.NeigborsSupportingMe)
+            {
+                if (segB == null) continue;
+
+                (BreakableWallSegment, BreakableWallSegment) pair = OrderedPair(segA, segB);
+
+                if (supportPairs.Contains(pair)) continue;
+                supportPairs.Add(pair);
+            }
+        }
+
+        foreach ((BreakableWallSegment, BreakableWallSegment) pair in supportPairs)
+        {
+            Vector3 start = pair.Item1.transform.position;
+            Vector3 end = pair.Item2.transform.position;
+            Vector3 mid = (start + end) * 0.5f;
+
+            // first half (start → midpoint)
+            Handles.color = colorCache[pair.Item1];
+            Handles.DrawLine(start, mid);
+
+            // second half (midpoint → end)
+            Handles.color = colorCache[pair.Item2];
+            Handles.DrawLine(mid, end);
+        }
+
+        Handles.zTest = UnityEngine.Rendering.CompareFunction.LessEqual;
+    }
+
+    private static (BreakableWallSegment, BreakableWallSegment) OrderedPair(BreakableWallSegment a, BreakableWallSegment b) => a.GetInstanceID() < b.GetInstanceID() ? (a, b) : (b, a);
+
+#endif
 
 }
