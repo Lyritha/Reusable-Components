@@ -350,6 +350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e283438f2ab9a37408c9ba35f0137ee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BaseCharacterMovement
+  forcedId: 0
 --- !u!114 &634742564630990586
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -402,8 +403,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b2dc1a7f1e8c2a4f83e1265ddcacf38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterLookFirstPerson
-  yawSensitivity: 0.5
-  pitchSensitivity: 0.5
+  yawSensitivity: 0.15
+  pitchSensitivity: 0.1
   minPitch: -60
   maxPitch: 60
 --- !u!114 &564946975858298640
@@ -418,6 +419,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce969de064205ec49b1007d3252a79ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterHealth
+  healthSlider: {fileID: 0}
   health:
     maxValue: 100
     currentValue: 0

@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class CharacterController : MonoBehaviour
+public class CharacterController : IdentifiableBehaviour<CharacterController>
 {
     private ICharacterInput input = null;
     private ICharacterInput lastInput = null;
@@ -18,7 +18,7 @@ public class CharacterController : MonoBehaviour
 
     private void OnMove(Vector2 dir)
     {
-        characterMove = GetComponent<ICharacterMove>();
+        characterMove ??= GetComponent<ICharacterMove>();
 
         // disable movement when in free look third person mode
         if (characterCameraMode == CameraMode.FreeLookThirdPerson)
@@ -33,7 +33,7 @@ public class CharacterController : MonoBehaviour
 
     private void OnLook(Vector2 dir)
     {
-        characterLook = GetComponent<ICharacterLook>();
+        characterLook ??= GetComponent<ICharacterLook>();
         characterLook?.OnLook(dir);
     }
 
@@ -56,25 +56,25 @@ public class CharacterController : MonoBehaviour
 
     private void OnSprint(bool isSprinting)
     {
-        characterSprint = GetComponent<ICharacterSprint>();
+        characterSprint ??= GetComponent<ICharacterSprint>();
         characterSprint?.OnSprint(isSprinting);
     }
 
     private void OnJump()
     {
-        characterJump = GetComponent<ICharacterJump>();
+        characterJump ??= GetComponent<ICharacterJump>();
         characterJump?.OnJump();
     }
 
     private void OnAttack(bool isAttacking)
     {
-        characterWeapon = GetComponentInChildren<IWeapon>();
+        characterWeapon ??= GetComponentInChildren<IWeapon>();
         characterWeapon?.Use(isAttacking);
     }
 
     private void Update()
     {
-        input = GetComponent<ICharacterInput>();
+        input ??= GetComponent<ICharacterInput>();
 
         if (input != lastInput)
         {

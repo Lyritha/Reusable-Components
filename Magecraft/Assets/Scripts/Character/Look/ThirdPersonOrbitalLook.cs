@@ -36,13 +36,14 @@ public class ThirdPersonOrbitalLook : MonoBehaviour, ICharacterLook
 
     public void OnLook(Vector2 dir) => lookInput = dir;
 
-    private void FixedUpdate()
+    private void Update()
     {
         if (camController == null) return;
 
         yaw += lookInput.x * yawSensitivity;
         pitch -= lookInput.y * pitchSensitivity;
         pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
+
         camController.SetRotation(yaw, pitch);
     }
 }

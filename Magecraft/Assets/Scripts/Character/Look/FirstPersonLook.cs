@@ -39,19 +39,22 @@ public class FirstPersonLook : MonoBehaviour, ICharacterLook
 
     public void OnLook(Vector2 dir) => lookInput = dir;
 
+    private void Update()
+    {
+        yaw += lookInput.x * yawSensitivity;
+
+        if (camController != null)
+        {
+            pitch -= lookInput.y * pitchSensitivity;
+            pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
+            camController.SetRotation(0, pitch);
+        }
+    }
+
     private void FixedUpdate()
     {
-        // rigidbody
-        yaw += lookInput.x * yawSensitivity;
         Quaternion targetRot = Quaternion.Euler(0f, yaw, 0f);
         rb.MoveRotation(targetRot);
-
-        // camera
-        if (camController == null) return;
-
-        pitch -= lookInput.y * pitchSensitivity;
-        pitch = Mathf.Clamp(pitch, minPitch, maxPitch);
-        camController.SetRotation(0, pitch);
     }
 
     private void OnDestroy()
