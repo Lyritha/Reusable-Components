@@ -8,6 +8,7 @@ public class EnemyInput : MonoBehaviour, ICharacterInput
 {
     NavMeshAgent agent;
 
+#pragma warning disable CS0067
     public event Action<Vector2> MoveEvent;
     public event Action<Vector2> LookEvent;
     public event Action SwitchLookEvent;
@@ -15,6 +16,8 @@ public class EnemyInput : MonoBehaviour, ICharacterInput
     public event Action JumpEvent;
     public event Action<bool> AttackEvent;
     public event Action<int> NumberSelectEvent;
+#pragma warning restore CS0067
+
 
     private Vector3 targetPosition;
     private float nextPositionTimer = 0;
