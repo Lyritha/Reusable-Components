@@ -1,12 +1,12 @@
-using NUnit.Framework;
-using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Inventory : MonoBehaviour
 {
-    private InventoryPouch<ScriptableBullets> bulletPouch = new();
-    private InventoryPouch<ScriptableItem> itemPouch = new();
+    private ItemPouch<ScriptableItem> inventoryPouch;
 
-    public InventoryPouch<ScriptableBullets> BulletPouch => bulletPouch;
-    public InventoryPouch<ScriptableItem> ItemPouch => itemPouch;
+    public ItemStack<ScriptableItem>[] GetItemsOfType(ItemType type)
+    {
+        return inventoryPouch.AllStacks.Where(stack => stack.Item.type == type).ToArray();
+    }
 }

@@ -8,4 +8,9 @@ public class ScriptableBullets : ScriptableItem
 
     // List of behaviors that apply to this bullet, such as homing, exploding, etc.
     public BulletBehaviour[] Behaviors;
+
+    private void OnValidate()
+    {
+        type = ItemType.Bullet;
+    }
 }
