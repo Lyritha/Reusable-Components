@@ -11,9 +11,6 @@ public class ShootablePhysicsObject : MonoBehaviour, IDamageable
 
     public void TakeDamage(int amount, Vector3 hitPoint, Vector3 hitDirection)
     {
-        Vector3 dir = transform.position - hitPoint;
-        rb.AddForceAtPosition(hitDirection * amount * 100f, hitPoint);
-
-        Debug.Log($"ShootablePhysicsObject took {amount} damage at {hitPoint}");
+        rb.AddForceAtPosition(100f * amount * hitDirection, hitPoint);
     }
 }

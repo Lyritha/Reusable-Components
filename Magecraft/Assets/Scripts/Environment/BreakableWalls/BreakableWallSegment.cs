@@ -15,6 +15,7 @@ public class BreakableWallSegment : MonoBehaviour, IDamageable
     [SerializeField]
     private List<BreakableWallSegment> neighborsIAmSupporting = new();
 
+    public List<BreakableWallSegment> NeigborsSupportingMe => neighborsSupportingMe;
 
     // runtime data
     public bool IsBroken { get; private set; } = false;
@@ -76,7 +77,7 @@ public class BreakableWallSegment : MonoBehaviour, IDamageable
 
 
 
-    #region Baking data and editor visualization
+    #region Baking data
 
     public void BakeFragmentData(float materialDensity)
     {
@@ -155,11 +156,13 @@ public class BreakableWallSegment : MonoBehaviour, IDamageable
         requiresSupport = true;
     }
 
-
     // visualize support relationships in editor
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
+        // Only draw if THIS object is the one selected
+        if (Selection.activeTransform != transform) return;
+
         float hue = GetRandomHueUtility.GetFromId(GetInstanceID());
 
         Handles.zTest = UnityEngine.Rendering.CompareFunction.Always;
@@ -186,8 +189,8 @@ public class BreakableWallSegment : MonoBehaviour, IDamageable
             Transform t = transforms[i];
             if (t == null) throw new System.ArgumentException("transforms contains null entries");
 
-            if (invert) GizmoUtils.DrawDirectedLine(t.position, myPos, 0.1f);
-            else GizmoUtils.DrawDirectedLine(myPos, t.position, 0.1f);
+            if (invert) GizmoUtils.DrawDirectedLine(t.position, myPos, 0.05f);
+            else GizmoUtils.DrawDirectedLine(myPos, t.position, 0.05f);
         }
     }
 #endif
