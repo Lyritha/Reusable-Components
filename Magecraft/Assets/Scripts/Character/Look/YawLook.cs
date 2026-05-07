@@ -31,4 +31,6 @@ public class YawLook : MonoBehaviour, ICharacterLook
     {
         rb.angularVelocity = Vector3.zero;
     }
+
+    public void OnWantToLook(bool enableLook){}
 }

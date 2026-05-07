@@ -72,6 +72,12 @@ public class CharacterController : MonoBehaviour
         characterWeapon?.Use(isAttacking);
     }
 
+    private void OnSecondaryAttack(bool isAttacking)
+    {
+        characterLook = GetComponent<ICharacterLook>();
+        characterLook?.OnWantToLook(isAttacking);
+    }
+
     private void Update()
     {
         input = GetComponent<ICharacterInput>();
@@ -93,6 +99,7 @@ public class CharacterController : MonoBehaviour
             oldInput.LookEvent -= OnLook;
             oldInput.SwitchLookEvent -= OnSwitchLook;
             oldInput.AttackEvent -= OnAttack;
+            oldInput.SecondaryAttackEvent -= OnSecondaryAttack;
         }
 
         if (newInput != null)
@@ -103,6 +110,7 @@ public class CharacterController : MonoBehaviour
             newInput.LookEvent += OnLook;
             newInput.SwitchLookEvent += OnSwitchLook;
             newInput.AttackEvent += OnAttack;
+            newInput.SecondaryAttackEvent += OnSecondaryAttack;
         }
     }
 
@@ -116,6 +124,8 @@ public class CharacterController : MonoBehaviour
             lastInput.SprintEvent -= OnSprint;
             lastInput.LookEvent -= OnLook;
             lastInput.SwitchLookEvent -= OnSwitchLook;
+            lastInput.AttackEvent -= OnAttack;
+            lastInput.SecondaryAttackEvent -= OnSecondaryAttack;
         }
     }
 

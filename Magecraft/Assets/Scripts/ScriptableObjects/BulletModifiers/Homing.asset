@@ -12,4 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 83c35fbf2e749214584fb253e1c6d7b8, type: 3}
   m_Name: Homing
   m_EditorClassIdentifier: Assembly-CSharp::BulletHoming
+  BehaviorName: Homing
+  BehaviorInfo: Tries to follow nearby enemies.
+  type: 2
+  statModifier:
+    Damage: 0
+    Speed: 1
+    Lifetime: 2
+    PelletCount: 0
+    PelletSpread: 0
+    Recoil: 0
+    PierceCount: 0
+    Knockback: 0
+    CritDamageMultiplier: -0.2
   turnSpeed: 5

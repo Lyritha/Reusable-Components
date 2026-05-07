@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[DefaultExecutionOrder(-50)]
 public class CameraController : MonoBehaviour
 {
     [SerializeField] private Transform pivot;
@@ -20,7 +21,18 @@ public class CameraController : MonoBehaviour
         targetOffset = currentOffset;
     }
 
-    public void SetCamOffset(Vector3 camOffset) => targetOffset = camOffset;
+    public void SetCamOffset(Vector3 camOffset, bool forcePos = false)
+    {
+        targetOffset = camOffset;
+
+        if (forcePos)
+        {
+            camT.localPosition = camOffset;
+            currentOffset = targetOffset;
+        }
+    }
+    public void SetCamTilt(float yaw, float pitch) => camT.localRotation = Quaternion.Euler(pitch, yaw, 0f);
+
     public void SetRotation(float yaw, float pitch) => pivot.localRotation = Quaternion.Euler(pitch, yaw, 0f);
 
 

@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f690e004093d3f4397a16a68c45b803, type: 3}
+  m_Name: Spray
+  m_EditorClassIdentifier: Assembly-CSharp::BulletModifier
+  BehaviorName: Spray and pray
+  BehaviorInfo: Remove everything
+  type: 0
+  statModifier:
+    Damage: -1
+    Speed: -2
+    Lifetime: -1
+    PelletCount: 9
+    PelletSpread: 60
+    Recoil: 0
+    PierceCount: 0
+    Knockback: 5
+    CritDamageMultiplier: 0.2

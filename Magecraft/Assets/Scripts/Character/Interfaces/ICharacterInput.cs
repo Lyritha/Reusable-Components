@@ -13,6 +13,7 @@ public interface ICharacterInput
 
     event Action JumpEvent;
     event Action<bool> AttackEvent;
+    event Action<bool> SecondaryAttackEvent;
 
     event Action<int> NumberSelectEvent;
 }

@@ -15,6 +15,7 @@ public class EnemyInput : MonoBehaviour, ICharacterInput
     public event Action<bool> SprintEvent;
     public event Action JumpEvent;
     public event Action<bool> AttackEvent;
+    public event Action<bool> SecondaryAttackEvent;
     public event Action<int> NumberSelectEvent;
 #pragma warning restore CS0067
 

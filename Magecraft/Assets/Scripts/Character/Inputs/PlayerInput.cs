@@ -15,6 +15,7 @@ public class PlayerInput : MonoBehaviour, ICharacterInput
 
     public event Action JumpEvent;
     public event Action<bool> AttackEvent;
+    public event Action<bool> SecondaryAttackEvent;
     public event Action<int> NumberSelectEvent;
 
     private void Awake()
@@ -43,6 +44,9 @@ public class PlayerInput : MonoBehaviour, ICharacterInput
         actions.Player.Attack.performed += OnAttack;
         actions.Player.Attack.canceled += OnAttack;
 
+        actions.Player.SecondaryAttack.performed += OnSecondaryAttack;
+        actions.Player.SecondaryAttack.canceled += OnSecondaryAttack;
+
         actions.Player.NumberKey.performed += OnNumberSelected;
     }
 
@@ -64,6 +68,9 @@ public class PlayerInput : MonoBehaviour, ICharacterInput
 
         actions.Player.Attack.performed -= OnAttack;
         actions.Player.Attack.canceled -= OnAttack;
+
+        actions.Player.SecondaryAttack.performed -= OnSecondaryAttack;
+        actions.Player.SecondaryAttack.canceled -= OnSecondaryAttack;
 
         actions.Player.NumberKey.performed -= OnNumberSelected;
 
@@ -88,6 +95,12 @@ public class PlayerInput : MonoBehaviour, ICharacterInput
     }
 
     private void OnJump(InputAction.CallbackContext ctx) => JumpEvent?.Invoke();
+
+    private void OnSecondaryAttack(InputAction.CallbackContext ctx)
+    {
+        bool isAttacking = ctx.ReadValue<float>() > 0.5f;
+        SecondaryAttackEvent?.Invoke(isAttacking);
+    }
 
     private void OnAttack(InputAction.CallbackContext ctx)
     {

@@ -10,7 +10,21 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac895842ca394b840bae459e9364cd4b, type: 3}
-  m_Name: Explode
+  m_Name: ImpactRound
   m_EditorClassIdentifier: Assembly-CSharp::BulletExplode
+  BehaviorName: Impact Round
+  BehaviorInfo: Makes bullet explode on impact
+  type: 3
+  statModifier:
+    Damage: 0
+    Speed: 0
+    Lifetime: 0
+    PelletCount: 0
+    PelletSpread: 0
+    Recoil: 0
+    PierceCount: -2
+    Knockback: 0
+    CritDamageMultiplier: 1
   radius: 5
-  force: 10
+  force: 100
+  ExplosionEffect: {fileID: 3437918817745226434, guid: 8e4e7a0aafdecab4b8003fada133584a, type: 3}

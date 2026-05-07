@@ -6,8 +6,8 @@ public class ScriptableBullets : ScriptableItem
     [Header("Bullet Properties")]
     public int DamageAmount;
 
-    // List of behaviors that apply to this bullet, such as homing, exploding, etc.
-    public BulletBehaviour[] Behaviors;
+    // List of modifiers that apply to this bullet, such as homing, exploding, etc.
+    public BulletModifier[] modifier;
 
     private void OnValidate()
     {

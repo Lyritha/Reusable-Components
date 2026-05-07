@@ -20,17 +20,21 @@ public class PotionDisplay : MonoBehaviour
     private GameObject[] spawnedShelfs;
     private GameObject[] spawnedBufferShelfs;
 
+    private bool isShown = false;
     private float height = 0;
 
     [ContextMenu("show shelf")]
-    public void Show() => ShowPotions(7);
-    [ContextMenu("show fun shelf")]
-    public void Showfun() => ShowPotions(400);
+    public void ToggleShelfs()
+    {
+        if (isShown) HidePotions();
+        else ShowPotions(20);
+    }
 
 
-    [ContextMenu("hide")]
     public void HidePotions()
     {
+        isShown = false;
+
         float animateTime = animationTime + (timePerInstance * spawnedShelfs.Length);
 
         Vector3 targetPos = shelfParent.transform.localPosition;
@@ -40,7 +44,6 @@ public class PotionDisplay : MonoBehaviour
 
         shelfParent.OnFinishedAnimating += ClearShelfs;
     }
-
     private void ClearShelfs()
     {
         foreach (Transform child in shelfParent.transform) Destroy(child.gameObject);
@@ -49,8 +52,12 @@ public class PotionDisplay : MonoBehaviour
         shelfParent.OnFinishedAnimating -= ClearShelfs;
     }
 
+
+
     public void ShowPotions(int potionCount)
     {
+        isShown = true;
+
         // clear existing gameobjects from shelf parent.
         foreach (Transform child in shelfParent.transform) Destroy(child.gameObject);
         shelfParent.Reset();
@@ -102,12 +109,6 @@ public class PotionDisplay : MonoBehaviour
 
         return startOffset;
     }
-    private void ClearBufferShelfs()
-    {
-        foreach (GameObject child in spawnedBufferShelfs)
-            Destroy(child);
-    }
-
 
     private void SpawnPotions(int count)
     {

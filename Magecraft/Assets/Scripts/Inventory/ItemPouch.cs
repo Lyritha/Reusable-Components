@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [Serializable]
-public class ItemPouch<T> where T : ScriptableObject
+public class ItemPouch<T> where T : class
 {
     public Action<ItemStack<T>> OnStackAdded;
     public Action<ItemStack<T>> OnStackUpdated;

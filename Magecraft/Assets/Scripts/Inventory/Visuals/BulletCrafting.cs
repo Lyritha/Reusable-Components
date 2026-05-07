@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -9,12 +8,10 @@ public class BulletCrafting : MonoBehaviour
     private TMP_Text behaviourText;
 
     [SerializeField]
-    private List<BulletBehaviour> baseBehaviour = new();
-
-    private List<BulletBehaviour> behaviours = new();
+    private Bullet resultBullet;
 
     [SerializeField]
-    private List<TypedTrigger<Rune>> slots = new() ;
+    private List<TypedTrigger<Rune>> slots = new();
 
     private void OnEnable()
     {
@@ -34,31 +31,29 @@ public class BulletCrafting : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        resultBullet = new();
+        UpdateUI();
+    }
+
     public void AddBulletBehavior(Rune rune)
     {
-        behaviours.Add(rune.BulletBehaviour);
+        resultBullet.AddModifier(rune.Modifier);
         UpdateUI();
     }
 
     public void RemoveBulletBehavior(Rune rune)
     {
-        behaviours.Remove(rune.BulletBehaviour);
+        resultBullet.RemoveModifier(rune.Modifier);
         UpdateUI();
     }
 
+
+
     private void UpdateUI()
     {
-        string text = "";
-
-        foreach (BulletBehaviour behaviour in behaviours)
-        {
-            List<FieldData> fields = behaviour.GetValues();
-            foreach (FieldData field in fields)
-            {
-                text += $"{field.FieldName}: {field.Value} \n";
-            }
-        }
-
+        string text = resultBullet.GetBulletInfo();
         behaviourText.text = text;
     }
 }

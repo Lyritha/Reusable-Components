@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ThirdPersonOrbitalLook : MonoBehaviour, ICharacterLook
+public class TableLook : MonoBehaviour, ICharacterLook
 {
     [SerializeField]
     private float yawSensitivity = 0.5f;
@@ -14,9 +14,10 @@ public class ThirdPersonOrbitalLook : MonoBehaviour, ICharacterLook
 
     private CameraController camController;
 
-    private float yaw;
     private float pitch;
+    private float yaw;
     private Vector2 lookInput;
+    private bool lookLock = true;
 
     private void Awake()
     {
@@ -24,21 +25,16 @@ public class ThirdPersonOrbitalLook : MonoBehaviour, ICharacterLook
 
         if (camController != null)
         {
-            camController.SetCamOffset(new(0, 1, -3));
-            camController.SetRotation(0f, 0f);
+            camController.SetCamOffset(new(0, 0.65f, -0.8f), true);
+            camController.SetCamTilt(0f, 35f);
         }
-
-        yaw = transform.eulerAngles.y;
-
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
     }
 
     public void OnLook(Vector2 dir) => lookInput = dir;
 
     private void FixedUpdate()
     {
-        if (camController == null) return;
+        if (camController == null || lookLock) return;
 
         yaw += lookInput.x * yawSensitivity;
         pitch -= lookInput.y * pitchSensitivity;
@@ -46,5 +42,5 @@ public class ThirdPersonOrbitalLook : MonoBehaviour, ICharacterLook
         camController.SetRotation(yaw, pitch);
     }
 
-    public void OnWantToLook(bool enableLook) { }
+    public void OnWantToLook(bool enableLook) => lookLock = !enableLook;
 }
