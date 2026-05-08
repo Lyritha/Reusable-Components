@@ -42,6 +42,8 @@ public class HealthSystem
         currentValue = maxValue;
         isInitialized = true;
         isDepleted = false;
+
+        OnValueChanged?.Invoke(currentValue, maxValue);
     }
 
     public int Restore(int amount)
