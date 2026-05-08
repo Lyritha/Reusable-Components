@@ -1,21 +1,34 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
-public class JumpController : MonoBehaviour, ICharacterJump
+[RequireComponent(typeof(Rigidbody), typeof(Collider))]
+public class JumpController : InputListener
 {
     [SerializeField]
-    private float jumpImpulse = 180f;
+    protected float jumpImpulse = 180f;
 
-    private Rigidbody rb;
-    private Collider col;
+    protected Rigidbody rb;
+    protected Collider col;
 
-    private void Awake()
+    protected void Awake()
     {
+        // handles component exclucivity, copies base class info
+        foreach (JumpController j in GetComponents<JumpController>())
+        {
+            if (j != this)
+            {
+                CopyBaseFieldsFrom(j);
+                Destroy(j);
+            }
+        }
+
+
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
+
+        AddSubscription(e => e.OnJump += OnJump, e => e.OnJump -= OnJump);
     }
 
-    public void OnJump()
+    protected virtual void OnJump()
     {
         if (IsGrounded())
         {
@@ -28,17 +41,19 @@ public class JumpController : MonoBehaviour, ICharacterJump
         }
     }
 
-    private bool IsGrounded()
+    protected bool IsGrounded()
     {
-        // Bottom of the collider
         float bottom = col.bounds.min.y;
 
-        // Start slightly above the bottom
         Vector3 origin = new(transform.position.x, bottom + 0.05f, transform.position.z);
-
-        // Cast downward a small distance
         float checkDistance = 0.1f;
 
         return Physics.Raycast(origin, Vector3.down, checkDistance);
     }
+
+    protected void CopyBaseFieldsFrom(JumpController other)
+    {
+        jumpImpulse = other.jumpImpulse;
+    }
+
 }

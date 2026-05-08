@@ -6,25 +6,25 @@ public class RotateTowardsTarget : MonoBehaviour
     [SerializeField]
     private bool lockToYRotation = true;
     [SerializeField]
-    private uint characterControllerId = 0;
+    private uint entityId = 0;
 
-    private EntityController characterController;
+    private EntityController entityController;
 
     private void Start()
     {
-        if (EntityController.TryGet(characterControllerId, out EntityController result)) characterController = result;
+        if (EntityController.TryGet(entityId, out EntityController result)) entityController = result;
     }
 
     private void Update()
     {
-        if (characterController == null)
+        if (entityController == null)
         {
-            if (EntityController.TryGet(characterControllerId, out EntityController result)) characterController = result;
+            if (EntityController.TryGet(entityId, out EntityController result)) entityController = result;
             else return;
         }
 
         Vector3 currentPos = transform.position;
-        Vector3 targetPos = characterController.transform.position;
+        Vector3 targetPos = entityController.transform.position;
 
         if (lockToYRotation) targetPos.y = currentPos.y;
 

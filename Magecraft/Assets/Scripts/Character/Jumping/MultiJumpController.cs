@@ -2,25 +2,14 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Collider))]
-public class MultiJumpController : MonoBehaviour, ICharacterJump
+public class MultiJumpController : JumpController
 {
-    [SerializeField]
-    private float jumpImpulse = 180f;
     [SerializeField]
     private int maxJumps = 2;
 
-    private Rigidbody rb;
-    private Collider col;
-
     private int jumpsUsed = 0;
 
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody>();
-        col = GetComponent<Collider>();
-    }
-
-    public void OnJump()
+    protected override void OnJump()
     {
         if (CanJump())
         {
@@ -37,20 +26,10 @@ public class MultiJumpController : MonoBehaviour, ICharacterJump
     {
         if (IsGrounded())
         {
-            jumpsUsed = 0; // reset jumps when grounded
+            jumpsUsed = 0;
             return true;
         }
 
-        // Allow one extra jump in the air
         return jumpsUsed < maxJumps;
-    }
-
-    private bool IsGrounded()
-    {
-        float bottom = col.bounds.min.y;
-        Vector3 origin = new(transform.position.x, bottom + 0.05f, transform.position.z);
-
-        // Small raycast to detect ground
-        return Physics.Raycast(origin, Vector3.down, 0.1f);
     }
 }

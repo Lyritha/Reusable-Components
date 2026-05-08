@@ -190,6 +190,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotateTowardsTarget
   lockToYRotation: 1
+  characterControllerId: 0
 --- !u!223 &4881708811536882741
 Canvas:
   m_ObjectHideFlags: 0
@@ -378,11 +379,7 @@ GameObject:
   - component: {fileID: 337550587579706612}
   - component: {fileID: 5192243557203417478}
   - component: {fileID: 1439463904054546508}
-  - component: {fileID: 8136281930208178556}
   - component: {fileID: 127030566594708644}
-  - component: {fileID: 3036240698252724221}
-  - component: {fileID: 1496855265662666870}
-  - component: {fileID: 5243973757571592019}
   - component: {fileID: 8995686100737852300}
   - component: {fileID: 858207752904834494}
   - component: {fileID: 4266381449580389851}
@@ -502,18 +499,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a1d4e9d2b0b8bd48a7a3fa60fa6ebd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyInput
---- !u!114 &8136281930208178556
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8405295724060196731}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18510c455ec995543b9f53da5e819be5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BaseCharacterMovement
+  forcedId: -1
 --- !u!114 &127030566594708644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -526,47 +512,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec8663eadf5bb6d4da369b5510f46d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterWalk
-  moveSpeed: {x: 2, y: 3}
+  maxSpeed:
+    forward: 1
+    backward: 1
+    left: 1
+    right: 1
   acceleration: 6
---- !u!114 &3036240698252724221
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8405295724060196731}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 59b8731b38eacaa4d9250073423306b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterSprint
-  sprintMult: 2
---- !u!114 &1496855265662666870
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8405295724060196731}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 835c9cc6c0146cf4ea28b810bbb91102, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterJumpSingle
-  jumpImpulse: 180
---- !u!114 &5243973757571592019
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8405295724060196731}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1a06158e6661edd4f91713c664b891b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterLookFirstPerson
-  yawSensitivity: 0.5
+  currentMaxSpeed:
+    forward: 0
+    backward: 0
+    left: 0
+    right: 0
 --- !u!114 &8995686100737852300
 MonoBehaviour:
   m_ObjectHideFlags: 0

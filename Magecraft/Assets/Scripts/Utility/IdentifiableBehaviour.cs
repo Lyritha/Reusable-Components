@@ -11,8 +11,10 @@ public abstract class IdentifiableBehaviour<T> : MonoBehaviour where T : Identif
     private static int pendingForcedCount = 0;
     private static bool forcedPhaseComplete = false;
 
-    [SerializeField, Tooltip("if not -1, force a specific id for this monobehavior")]
+    [SerializeField, Tooltip("If not -1, force a specific ID for this (or the parent class) type")]
     private int forcedId = -1;
+    [SerializeField, ShowOnly]
+    private int Id = 0;
 
     public uint InstanceId { get; private set; } = uint.MaxValue;
 
@@ -40,6 +42,7 @@ public abstract class IdentifiableBehaviour<T> : MonoBehaviour where T : Identif
 
             registry[forcedUnsignedId] = (T)this;
             InstanceId = forcedUnsignedId;
+            Id = (int)forcedUnsignedId;
 
             // remove from pending, if no are pending set finished to true
             pendingForcedCount--;
@@ -62,6 +65,7 @@ public abstract class IdentifiableBehaviour<T> : MonoBehaviour where T : Identif
         // Assign this instance
         registry[nextId] = (T)this;
         InstanceId = nextId;
+        Id = (int)nextId;
     }
 
     protected virtual void OnDestroy() => registry.Remove(InstanceId);
