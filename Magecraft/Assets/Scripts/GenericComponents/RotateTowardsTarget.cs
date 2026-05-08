@@ -8,18 +8,18 @@ public class RotateTowardsTarget : MonoBehaviour
     [SerializeField]
     private uint characterControllerId = 0;
 
-    private CharacterController characterController;
+    private EntityController characterController;
 
     private void Start()
     {
-        if (CharacterController.TryGet(characterControllerId, out CharacterController result)) characterController = result;
+        if (EntityController.TryGet(characterControllerId, out EntityController result)) characterController = result;
     }
 
     private void Update()
     {
         if (characterController == null)
         {
-            if (CharacterController.TryGet(characterControllerId, out CharacterController result)) characterController = result;
+            if (EntityController.TryGet(characterControllerId, out EntityController result)) characterController = result;
             else return;
         }
 

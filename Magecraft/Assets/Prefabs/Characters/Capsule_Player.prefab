@@ -709,6 +709,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18510c455ec995543b9f53da5e819be5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BaseCharacterMovement
+  forcedId: 0
 --- !u!114 &913844483653224952
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -778,6 +779,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce969de064205ec49b1007d3252a79ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterHealth
+  healthSlider: {fileID: 0}
   health:
     maxValue: 100
     currentValue: 0
