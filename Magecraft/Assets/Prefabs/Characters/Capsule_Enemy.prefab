@@ -257,7 +257,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8405295724060196731}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e283438f2ab9a37408c9ba35f0137ee4, type: 3}
+  m_Script: {fileID: 11500000, guid: 18510c455ec995543b9f53da5e819be5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BaseCharacterMovement
 --- !u!114 &127030566594708644

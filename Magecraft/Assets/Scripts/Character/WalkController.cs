@@ -15,7 +15,10 @@ public class WalkController : MonoBehaviour, ICharacterMove
 
     private void Awake() => rb = GetComponent<Rigidbody>();
 
-    public void Move(Vector2 dir) => this.dir = dir;
+    public void Move(Vector2 dir)
+    {
+        this.dir = dir;
+    }
 
     private void FixedUpdate()
     {

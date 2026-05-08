@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class CharacterController : MonoBehaviour
+public class EntityController : MonoBehaviour
 {
     private ICharacterInput input = null;
     private ICharacterInput lastInput = null;
