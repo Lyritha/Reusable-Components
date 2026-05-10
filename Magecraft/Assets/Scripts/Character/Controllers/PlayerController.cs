@@ -22,6 +22,7 @@ public class PlayerController : EntityController
         Bind(actions.Player.Attack, OnAttackInput);
         Bind(actions.Player.SecondaryAttack, OnSecondaryAttackInput);
 
+        actions.Player.Interact.performed += OnInteractInput;
         actions.Player.Tab.performed += OnTabInput;
         actions.Player.Jump.performed += OnJumpInput;
         actions.Player.NumberKey.performed += OnNumberSelectedInput;
@@ -35,6 +36,7 @@ public class PlayerController : EntityController
         Unbind(actions.Player.Attack, OnAttackInput);
         Unbind(actions.Player.SecondaryAttack, OnSecondaryAttackInput);
 
+        actions.Player.Interact.performed -= OnInteractInput;
         actions.Player.Tab.performed -= OnTabInput;
         actions.Player.Jump.performed -= OnJumpInput;
         actions.Player.NumberKey.performed -= OnNumberSelectedInput;
@@ -61,6 +63,8 @@ public class PlayerController : EntityController
     private void OnJumpInput(InputAction.CallbackContext ctx) => RaiseJump();
     private void OnAttackInput(InputAction.CallbackContext ctx) => RaisePrimaryMouse(ctx.ReadValue<float>() > 0.5f);
     private void OnSecondaryAttackInput(InputAction.CallbackContext ctx) => RaiseSecondaryMouse(ctx.ReadValue<float>() > 0.5f);
+    private void OnInteractInput(InputAction.CallbackContext ctx) => RaiseInteract();
+
     private void OnTabInput(InputAction.CallbackContext ctx) => RaiseTab();
     private void OnNumberSelectedInput(InputAction.CallbackContext ctx) => RaiseNumberSelected(int.Parse(ctx.control.displayName));
 }

@@ -6,10 +6,9 @@ using UnityEngine;
 
 public class BreakableWall : MonoBehaviour
 {
-    [Header("---- Break Settings ----")]
-    [SerializeField] private float breakForce = 250f;
-    [SerializeField] private float breakRadius = 3f;
-    [SerializeField] private float materialDensity = 50; 
+    [Header("---- materialSettings ----")]
+    [SerializeField] private float materialDensity = 50;
+    [SerializeField] private float minMaterialDensity = 3; 
 
     [Space(10)]
     [Header("---- Fragments ----")]
@@ -19,15 +18,8 @@ public class BreakableWall : MonoBehaviour
     [SerializeField]
     private List<BreakableWallSegment> brokenPieces = new();
 
-    public void TakeDamage(int _, Vector3 hitPoint)
+    public void OnPieceBroken()
     {
-        // First pass: apply explosion force
-        for (int i = brokenPieces.Count - 1; i >= 0; i--)
-        {
-            BreakableWallSegment seg = brokenPieces[i];
-            if (seg != null) seg.ApplyExplosionForce(breakForce, hitPoint, breakRadius);
-        }
-
         // Second pass: remove broken pieces
         for (int i = brokenPieces.Count - 1; i >= 0; i--)
         {
@@ -35,10 +27,7 @@ public class BreakableWall : MonoBehaviour
             if (seg == null || seg.IsBroken) brokenPieces.RemoveAt(i);
         }
 
-        if (brokenPieces.Count == 0)
-        {
-            Destroy(this);
-        }
+        if (brokenPieces.Count == 0) Destroy(this);
     }
 
 
@@ -56,7 +45,7 @@ public class BreakableWall : MonoBehaviour
         brokenPieces.Sort((a, b) => b.transform.position.y.CompareTo(a.transform.position.y));
 
         foreach (BreakableWallSegment seg in brokenPieces) seg.ResetBakedData();
-        foreach (BreakableWallSegment seg in brokenPieces) seg.BakeFragmentData(materialDensity);
+        foreach (BreakableWallSegment seg in brokenPieces) seg.BakeFragmentData(minMaterialDensity, materialDensity);
 
         // avoid changes being lost if user bakes in edit mode
     #if UNITY_EDITOR

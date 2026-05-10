@@ -347,6 +347,7 @@ MonoBehaviour:
   weapons:
   - {fileID: 11400000, guid: c6011f7fa0a5eb24e8967fa8e769d8c6, type: 2}
   - {fileID: 11400000, guid: f1881caa7efd097418f1b3eb9bf477ca, type: 2}
+  - {fileID: 11400000, guid: 7346c8c496fd84a4dba46178258a2621, type: 2}
 --- !u!1 &5657876675837987759
 GameObject:
   m_ObjectHideFlags: 0
@@ -796,6 +797,7 @@ GameObject:
   - component: {fileID: 5740184989797856212}
   - component: {fileID: 3855489919262232249}
   - component: {fileID: 1750332518955446462}
+  - component: {fileID: 7049554734281676108}
   - component: {fileID: 5719639285464878529}
   - component: {fileID: 3372497045807479532}
   - component: {fileID: 560900803574153556}
@@ -930,6 +932,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::JumpController
   entity: {fileID: 0}
   jumpImpulse: 180
+--- !u!114 &7049554734281676108
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7020241106117507846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 933dd382035376f42bf3ff85c5aa8a23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
+  entity: {fileID: 0}
+  maxDistance: 4
 --- !u!33 &5719639285464878529
 MeshFilter:
   m_ObjectHideFlags: 0

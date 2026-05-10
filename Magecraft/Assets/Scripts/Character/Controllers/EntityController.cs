@@ -14,6 +14,7 @@ public class EntityController : IdentifiableBehaviour<EntityController>
 
     public event Action<bool> OnPrimaryMouse;
     public event Action<bool> OnSecondaryMouse;
+    public event Action OnInteract;
 
     public event Action OnTab;
     public event Action<int> OnNumberSelected;
@@ -25,6 +26,7 @@ public class EntityController : IdentifiableBehaviour<EntityController>
     protected void RaiseJump() => OnJump?.Invoke();
     protected void RaisePrimaryMouse(bool v) => OnPrimaryMouse?.Invoke(v);
     protected void RaiseSecondaryMouse(bool v) => OnSecondaryMouse?.Invoke(v);
+    protected void RaiseInteract() => OnInteract?.Invoke();
     protected void RaiseTab() => OnTab?.Invoke();
     protected void RaiseNumberSelected(int v) => OnNumberSelected?.Invoke(v);
 #pragma warning restore CS0067

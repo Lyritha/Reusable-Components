@@ -4,6 +4,7 @@ using UnityEngine;
 
 /// <summary>
 /// Base class for components that subscribe to events on an EntityController.
+/// Must be on the same gameobject or a child object of an EntityController.
 /// <list type="bullet">
 /// <item>Finds the EntityController in parent objects</item>
 /// <item>Subscribes automatically when the EntityController becomes available</item>
@@ -87,7 +88,7 @@ public abstract class InputListener : MonoBehaviour
         else retryTimer = 0f;
     }
 
-    private void OnDisable() => RemoveAllSubscriptions();
+    protected virtual void OnDisable() => RemoveAllSubscriptions();
 
     private void RemoveAllSubscriptions()
     {

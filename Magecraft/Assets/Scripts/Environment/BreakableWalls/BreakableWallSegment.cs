@@ -1,10 +1,12 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(Collider), typeof(Rigidbody))]
-public class BreakableWallSegment : MonoBehaviour, IDamageable
+public class BreakableWallSegment : MonoBehaviour, IDamageable, IExplodeable
 {
 
     // all baked data, set via parent script parentWall.
@@ -20,6 +22,7 @@ public class BreakableWallSegment : MonoBehaviour, IDamageable
     // runtime data
     public bool IsBroken { get; private set; } = false;
 
+
     // cached references
     private BreakableWall parentWall;
     private Rigidbody rb;
@@ -32,14 +35,12 @@ public class BreakableWallSegment : MonoBehaviour, IDamageable
         rb.isKinematic = true;
     }
 
-    // entry point for damage from external sources (e.g. gunshots, explosions), pass to parent to handle all fragments together
-    public void TakeDamage(int amount, Vector3 hitPoint, Vector3 hitDirection) => parentWall.TakeDamage(amount, hitPoint);
+    public void TakeDamage(int amount, Vector3 hitPoint, Vector3 hitDirection) 
+        => Break(true, amount * 100, hitPoint, 100);
+    public void Explode(int amount, Vector3 position, float sourceRadius, float forceRadius, float force)
+        => Break(true, force, position, forceRadius);
 
-    // 2 situation where a wall segment should break
-    public void ApplyExplosionForce(float force, Vector3 position, float radius)
-    {
-        if (Vector3.Distance(transform.position, position) <= radius) Break(true, force, position, radius * 3);
-    }
+
     public void TestSupport(BreakableWallSegment caller)
     {
         if (!requiresSupport || IsBroken) return;
@@ -54,10 +55,12 @@ public class BreakableWallSegment : MonoBehaviour, IDamageable
         if (IsBroken) return;
         IsBroken = true;
 
+        parentWall.OnPieceBroken();
+
         transform.localScale = Vector3.one * 0.9f;
 
         rb.isKinematic = false;
-        if (applyExplosion) rb.AddExplosionForce(force, pos, radius);
+        if (applyExplosion) StartCoroutine(ApplyForceNextFrame(force, pos, radius));
 
         // Notify pieces above me that they lost support
         foreach (BreakableWallSegment upper in neighborsIAmSupporting)
@@ -75,23 +78,31 @@ public class BreakableWallSegment : MonoBehaviour, IDamageable
         Destroy(this);
     }
 
+    private IEnumerator ApplyForceNextFrame(float force, Vector3 pos, float radius)
+    {
+        yield return new WaitForFixedUpdate(); // ensures physics step happens
+
+        rb.AddExplosionForce(force, pos, radius);
+    }
 
 
     #region Baking data
 
-    public void BakeFragmentData(float materialDensity)
+    public void BakeFragmentData(float minMaterialDensity, float materialDensity)
     {
         Bounds b = GetComponent<Collider>().bounds;
         Rigidbody rb = GetComponent<Rigidbody>();
 
         rb.isKinematic = true;
-        CalculateMass(b, rb, materialDensity);
+        CalculateMass(b, rb, minMaterialDensity, materialDensity);
         FindNeighborsSupportingMe(b);
     }
-    private void CalculateMass(Bounds b, Rigidbody rb, float materialDensity)
+    private void CalculateMass(Bounds b, Rigidbody rb, float minMaterialDensity, float materialDensity)
     {
         float volume = b.size.x * b.size.y * b.size.z;
-        rb.mass = volume * materialDensity;
+        float mass = volume * materialDensity;
+        mass = Mathf.Max(mass, minMaterialDensity);
+        rb.mass = mass;
     }
     private void FindNeighborsSupportingMe(Bounds b)
     {

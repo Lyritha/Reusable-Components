@@ -1,5 +1,5 @@
 using UnityEngine;
 
-public class Weapon : InputListener
+public abstract class Weapon : InputListener
 {
 }

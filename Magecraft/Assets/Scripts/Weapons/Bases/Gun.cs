@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Gun : Weapon
+public abstract class Gun : Weapon
 {
     protected Ray ray = new();
 

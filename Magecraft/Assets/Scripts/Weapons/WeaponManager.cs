@@ -1,4 +1,3 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -19,7 +18,11 @@ public class WeaponManager : InputListener
     {
         if (number > 0 && number <= weapons.Count)
         {
-            Destroy(currentWeapon);
+            if (currentWeapon != null)
+            {
+                currentWeapon.SetActive(false);
+                Destroy(currentWeapon);
+            }
 
             WeaponAsset selectedWeapon = weapons[number - 1];
             currentWeapon = Instantiate(selectedWeapon.weaponPrefab, transform, false);
