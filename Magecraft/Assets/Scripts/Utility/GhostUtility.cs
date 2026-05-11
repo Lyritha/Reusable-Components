@@ -17,6 +17,15 @@ public static class GhostUtility
     {
         GameObject ghost = Object.Instantiate(source, parent);
         StripComponents(ghost);
+
+        foreach (Renderer rend in ghost.GetComponentsInChildren<Renderer>())
+        {
+            Color color = rend.material.color;
+            color.a = 0.25f;
+
+            rend.material.color = color;
+        }
+
         ghost.SetActive(setActive);
         return ghost;
     }
