@@ -49,12 +49,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d13b635f1ac8c842abdd400aa47e21b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlasticExplosive
-  explosionTime: 5
-  explosionRadius: 2.5
-  explosionDamage: 50
-  explosionForce: 50
-  explosionPrefab: {fileID: 3437918817745226434, guid: 8e4e7a0aafdecab4b8003fada133584a, type: 3}
-  AudioSource: {fileID: 1292705570170492911}
+  explosionSystem:
+    damage: 50
+    radius: 5
+    force: 1000
+    explosionPrefab: {fileID: 3437918817745226434, guid: 8e4e7a0aafdecab4b8003fada133584a, type: 3}
+  explosionDelay: 5
+  audioSource: {fileID: 1292705570170492911}
   tickSound: {fileID: 8300000, guid: 739b80fc73d981b45836df4aad475cd1, type: 3}
 --- !u!65 &6522367807385967417
 BoxCollider:

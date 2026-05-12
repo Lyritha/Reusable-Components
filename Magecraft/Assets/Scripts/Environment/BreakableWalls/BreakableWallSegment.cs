@@ -57,10 +57,10 @@ public class BreakableWallSegment : MonoBehaviour, IDamageable, IExplodeable
 
         parentWall.OnPieceBroken();
 
-        transform.localScale = Vector3.one * 0.9f;
+        transform.localScale = Vector3.one * 0.95f;
 
         rb.isKinematic = false;
-        if (applyExplosion) StartCoroutine(ApplyForceNextFrame(force, pos, radius));
+
 
         // Notify pieces above me that they lost support
         foreach (BreakableWallSegment upper in neighborsIAmSupporting)
@@ -75,7 +75,7 @@ public class BreakableWallSegment : MonoBehaviour, IDamageable, IExplodeable
         neighborsIAmSupporting.Clear();
 
         gameObject.AddComponent<ShootablePhysicsObject>();
-        Destroy(this);
+        if (applyExplosion) StartCoroutine(ApplyForceNextFrame(force, pos, radius));
     }
 
     private IEnumerator ApplyForceNextFrame(float force, Vector3 pos, float radius)
@@ -83,6 +83,7 @@ public class BreakableWallSegment : MonoBehaviour, IDamageable, IExplodeable
         yield return new WaitForFixedUpdate(); // ensures physics step happens
 
         rb.AddExplosionForce(force, pos, radius);
+        Destroy(this);
     }
 
 

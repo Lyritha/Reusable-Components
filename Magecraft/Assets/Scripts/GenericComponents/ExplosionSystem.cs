@@ -5,53 +5,63 @@ using UnityEngine;
 public class ExplosionSystem
 {
     [SerializeField]
-    private float explosionRadius = 5;
+    private int damage = 50;
     [SerializeField]
-    private int explosionDamage = 50;
+    private float radius = 5;
+    [SerializeField, Tooltip("If force = 0, apply no force at all to any object")]
+    private float force = 100;
     [SerializeField]
-    private float explosionForce = 100;
+    private GameObject explosionPrefab;
 
-    private Transform transform;
+    public Action OnExploded;
+
     private GameObject gameObject;
+    private bool useLineOfSight = true;
+    private bool isInitilized = false;
+    private bool isExploding = false;
 
-    public void Initialize(Transform transform, GameObject gameObject)
+    public void Initialize(GameObject gameObject, bool useLineOfSight = true)
     {
-        this.transform = transform;
         this.gameObject = gameObject;
+        this.useLineOfSight = useLineOfSight;
+
+        isInitilized = true;
+        isExploding = false;
     }
 
 
     public void Explode()
     {
-        foreach (Collider col in Physics.OverlapSphere(transform.position, explosionRadius))
+        if (!isInitilized)
+        {
+            Debug.LogWarning("Tried to use explosion system, but it has not been initialized yet");
+            return;
+        }
+
+        if (isExploding) return;
+        isExploding = true;
+
+        Vector3 pos = gameObject.transform.position;
+        float forceRadius = 2 * radius;
+
+        if (explosionPrefab != null) GameObject.Instantiate(explosionPrefab, pos, Quaternion.identity);
+
+        foreach (Collider col in Physics.OverlapSphere(pos, radius))
         {
             if (col.gameObject == gameObject) continue;
-
-            if (!HasLineOfSight(transform.position, col)) continue;
-
-            Rigidbody rb = col.attachedRigidbody;
-            bool canApplyForce = rb != null && !rb.isKinematic;
-            float forceRadius = 2 * explosionRadius;
+            if (useLineOfSight && !HasLineOfSight(pos, col)) continue;
 
             if (col.TryGetComponent(out IExplodeable explodeable))
-            {
-                explodeable.Explode(explosionDamage, transform.position, explosionRadius, forceRadius, explosionForce);
+                explodeable.Explode(damage, pos, radius, forceRadius, force);
+            else if (col.TryGetComponent(out IDamageable dmg))
+                dmg.TakeDamage(damage, pos, (col.transform.position - pos).normalized);
 
-                if (canApplyForce) col.attachedRigidbody.AddExplosionForce(explosionForce, transform.position, forceRadius);
-                continue;
-            }
-
-            if (col.TryGetComponent(out IDamageable dmg))
-            {
-                Vector3 hitDirection = (col.transform.position - transform.position).normalized;
-                dmg.TakeDamage(explosionDamage, transform.position, hitDirection);
-
-                if (canApplyForce) col.attachedRigidbody.AddExplosionForce(explosionForce, transform.position, forceRadius);
-                continue;
-            }
-
-            if (canApplyForce) col.attachedRigidbody.AddExplosionForce(explosionForce, transform.position, forceRadius);
+            Rigidbody rb = col.attachedRigidbody;
+            bool canApplyForce = rb != null && !rb.isKinematic && force > 0;
+            if (canApplyForce) rb.AddExplosionForce(force, pos, forceRadius);
         }
+
+        OnExploded?.Invoke();
     }
 
     private static bool HasLineOfSight(Vector3 origin, Collider target)
@@ -59,24 +69,29 @@ public class ExplosionSystem
         Vector3 direction = (target.bounds.center - origin).normalized;
         float distance = Vector3.Distance(origin, target.bounds.center);
 
-        // Get ALL hits along the ray
-        RaycastHit[] hits = Physics.RaycastAll(origin, direction, distance);
-
-        foreach (var hit in hits)
+        foreach (RaycastHit hit in Physics.RaycastAll(origin, direction, distance))
         {
-            // Ignore the explosive itself
             if (hit.collider == target) return true;
-
-            // Allow some penetration into obstacles
             if (Vector3.Distance(origin, hit.point) < 1f) continue;
 
-            // Ignore explodable objects (they should not block LOS)
+            // Ignore explodable objects
             if (hit.collider.TryGetComponent(out IExplodeable _)) continue;
 
-            // Anything else blocks LOS
             return false;
         }
 
         return true;
+    }
+
+    public void Gizmo(GameObject obj = null)
+    {
+        GameObject gizmoObj = gameObject == null ? obj : gameObject;
+        if (gizmoObj == null) return;
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(gizmoObj.transform.position, radius);
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(gizmoObj.transform.position, radius * 2);
+        Gizmos.color = Color.white;
     }
 }
