@@ -6,6 +6,9 @@ using UnityEngine;
 /// </summary>
 public class ContinuesRaycast : MonoBehaviour
 {
+    [SerializeField]
+    private LayerMask raycastLayerMask = ~0;
+
     private static ContinuesRaycast instance;
     public static Action<RaycastHit> OnRayHit;
     public static Action<RaycastHit> OnRayEntered;
@@ -18,19 +21,19 @@ public class ContinuesRaycast : MonoBehaviour
 
     public static ContinuesRaycast EnsureExistence()
     {
-            if (instance != null) return instance;
+        if (instance != null) return instance;
 
-            Camera cam = Camera.main;
-            if (cam == null)
-            {
-                Debug.LogError("ContinuesRaycast: No MainCamera found in scene.");
-                return null;
-            }
+        Camera cam = Camera.main;
+        if (cam == null)
+        {
+            Debug.LogError("ContinuesRaycast: No MainCamera found in scene.");
+            return null;
+        }
 
-if (!cam.TryGetComponent(out instance))
-    instance = cam.gameObject.AddComponent<ContinuesRaycast>();
+        if (!cam.TryGetComponent(out instance))
+            instance = cam.gameObject.AddComponent<ContinuesRaycast>();
 
-return instance;
+        return instance;
     }
 
 
@@ -69,7 +72,7 @@ return instance;
         Vector3 screenCenter = new(Screen.width / 2f, Screen.height / 2f, 0f);
         ray = cam.ScreenPointToRay(screenCenter);
 
-        Physics.Raycast(ray, out hit);
+        Physics.Raycast(ray, out hit, Mathf.Infinity, raycastLayerMask);
 
         return hit.collider != null;
     }

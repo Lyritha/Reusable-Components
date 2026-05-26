@@ -48,6 +48,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GunAutomatic
   entity: {fileID: 0}
+  rayMask:
+    serializedVersion: 2
+    m_Bits: 247
   bulletHitVfx: {fileID: 3437918817745226434, guid: 684b8856199a9824fb57ce1a7151eea0, type: 3}
 --- !u!1 &2189983562922632616
 GameObject:

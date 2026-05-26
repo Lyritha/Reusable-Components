@@ -2,6 +2,10 @@
 
 public class AnimatedWalkController : WalkController
 {
+    private static readonly int VelocityMagnitudeHash = Animator.StringToHash("Velocity/Magnitude");
+    private static readonly int VelocityZHash = Animator.StringToHash("Velocity/Z");
+    private static readonly int VelocityXHash = Animator.StringToHash("Velocity/X");
+
     [SerializeField]
     private Animator animator;
 
@@ -20,9 +24,9 @@ public class AnimatedWalkController : WalkController
 
         if (animator != null)
         {
-            animator.SetFloat("Velocity/X", normalizedVelocity.x);
-            animator.SetFloat("Velocity/Z", normalizedVelocity.y);
-            animator.SetFloat("Velocity/Magnitude", normalizedVelocity.magnitude);
+            animator.SetFloat(VelocityXHash, normalizedVelocity.x);
+            animator.SetFloat(VelocityZHash, normalizedVelocity.y);
+            animator.SetFloat(VelocityMagnitudeHash, normalizedVelocity.magnitude);
         }
     }
 }

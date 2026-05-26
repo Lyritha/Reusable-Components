@@ -185,7 +185,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2183493533701143431}
   m_Layer: 0
-  m_Name: HeadLookTarget
+  m_Name: HeadLookTarget (Unparent)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -556,7 +556,7 @@ GameObject:
   - component: {fileID: 1853755519454863471}
   - component: {fileID: 7952019114987096527}
   - component: {fileID: 3775149177014787415}
-  - component: {fileID: 8144086934556526196}
+  - component: {fileID: 2676813588612431382}
   m_Layer: 0
   m_Name: Third Person Aim Camera
   m_TagString: Untagged
@@ -572,13 +572,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6160855218787461445}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.000000053354388, z: 0, w: 1}
-  m_LocalPosition: {x: 0.6013096, y: 1.4482476, z: -0.8644991}
+  m_LocalRotation: {x: -0.000000042197744, y: 0.0000002690106, z: 1.135164e-14, w: 1}
+  m_LocalPosition: {x: 0.6, y: 1.5, z: -0.9000001}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7325773989715527902}
-  m_LocalEulerAnglesHint: {x: -42.769, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -0.02, z: 0}
 --- !u!114 &7952019114987096527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -595,11 +595,11 @@ MonoBehaviour:
     Enabled: 1
     m_Value: 1
   OutputChannel: 1
-  StandbyUpdate: 2
+  StandbyUpdate: 1
   m_StreamingVersion: 20241001
   m_LegacyPriority: 0
   Target:
-    TrackingTarget: {fileID: 5129739859196743992}
+    TrackingTarget: {fileID: 7325773989715527902}
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
@@ -635,7 +635,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineThirdPersonFollow
   Damping: {x: 0.1, y: 0.5, z: 0.3}
-  ShoulderOffset: {x: 0.6, y: 0.2, z: 0}
+  ShoulderOffset: {x: 0.6, y: 1.5, z: 0}
   VerticalArmLength: 0
   CameraSide: 1
   CameraDistance: 0.9
@@ -648,7 +648,7 @@ MonoBehaviour:
     CameraRadius: 0.2
     DampingIntoCollision: 0
     DampingFromCollision: 0.5
---- !u!114 &8144086934556526196
+--- !u!114 &2676813588612431382
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -657,15 +657,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 6160855218787461445}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2588cc5dedbb75e49a44aada63f7b939, type: 3}
+  m_Script: {fileID: 11500000, guid: 62d54399b04b4fa48a73e121d4937dd4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineThirdPersonAim
-  AimCollisionFilter:
-    serializedVersion: 2
-    m_Bits: 1
-  IgnoreTag: 
-  AimDistance: 200
-  NoiseCancellation: 1
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachinePanTilt
+  ReferenceFrame: 0
+  RecenterTarget: 0
+  PanAxis:
+    Value: 0
+    Center: 0
+    Range: {x: -180, y: 180}
+    Wrap: 1
+    Recentering:
+      Enabled: 0
+      Wait: 1
+      Time: 2
+    Restrictions: 0
+  TiltAxis:
+    Value: 0
+    Center: 0
+    Range: {x: -70, y: 70}
+    Wrap: 0
+    Recentering:
+      Enabled: 0
+      Wait: 1
+      Time: 2
+    Restrictions: 0
 --- !u!1 &6268659593928424200
 GameObject:
   m_ObjectHideFlags: 0
@@ -693,7 +709,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6268659593928424200}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.025635768, y: -0.055754516, z: 0.00143201, w: 0.99811435}
+  m_LocalRotation: {x: 0.025635766, y: -0.05575451, z: 0.0014320099, w: 0.99811435}
   m_LocalPosition: {x: 1.2613101, y: 2.3682475, z: -2.2844992}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -901,8 +917,9 @@ MonoBehaviour:
   yawSensitivity: 0.5
   pitchSensitivity: 0.5
   constraint: {fileID: 6423967998348038440}
-  bodyTurnThreshold: 30
-  bodyTurnSpeed: 5
+  bodyTurnThreshold: 5
+  bodyTurnSpeed: 10
+  panTilt: {fileID: 2676813588612431382}
 --- !u!114 &3855489919262232249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1378,7 +1395,7 @@ Transform:
   m_GameObject: {fileID: 7949794805351349926}
   serializedVersion: 2
   m_LocalRotation: {x: 0.0035311182, y: -0.0038739047, z: -0.73777866, w: 0.67502236}
-  m_LocalPosition: {x: 0.62934554, y: 1.1492685, z: 0.03946972}
+  m_LocalPosition: {x: 0.62934554, y: 1.1492685, z: 0.039470196}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -2131,7 +2148,7 @@ MonoBehaviour:
   FadeOutDistance: 0
   DistanceFrom: {fileID: 0}
   AutoHelperOffset: 1
-  HelperOffset: {x: -2.2073725e-10, y: 0.0063084145, z: -0.00044765722}
+  HelperOffset: {x: -2.2073614e-10, y: 0.0063084164, z: -0.00044765978}
   GravityEffectForce: {x: 0, y: 0, z: 0}
   GravityHeavyness: 2
   _editor_Title: ' Bones Stimulator'
