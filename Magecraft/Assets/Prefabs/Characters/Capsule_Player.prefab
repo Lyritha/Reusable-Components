@@ -558,7 +558,7 @@ GameObject:
   - component: {fileID: 3775149177014787415}
   - component: {fileID: 2676813588612431382}
   m_Layer: 0
-  m_Name: Third Person Aim Camera
+  m_Name: ThirdPersonCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -573,7 +573,7 @@ Transform:
   m_GameObject: {fileID: 6160855218787461445}
   serializedVersion: 2
   m_LocalRotation: {x: -0.000000042197744, y: 0.0000002690106, z: 1.135164e-14, w: 1}
-  m_LocalPosition: {x: 0.6, y: 1.5, z: -0.9000001}
+  m_LocalPosition: {x: 0.6, y: 1.5, z: -0.8000002}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -603,7 +603,7 @@ MonoBehaviour:
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 60
+    FieldOfView: 90
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 50000
@@ -638,9 +638,9 @@ MonoBehaviour:
   ShoulderOffset: {x: 0.6, y: 1.5, z: 0}
   VerticalArmLength: 0
   CameraSide: 1
-  CameraDistance: 0.9
+  CameraDistance: 0.8
   AvoidObstacles:
-    Enabled: 0
+    Enabled: 1
     CollisionFilter:
       serializedVersion: 2
       m_Bits: 1
@@ -692,10 +692,9 @@ GameObject:
   m_Component:
   - component: {fileID: 1168833019508120611}
   - component: {fileID: 7015746081765601851}
-  - component: {fileID: 4155025521072879112}
-  - component: {fileID: 8328301000423023314}
+  - component: {fileID: 6522159904927841244}
   m_Layer: 0
-  m_Name: CinemachineCamera
+  m_Name: FirstPersonCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -709,13 +708,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6268659593928424200}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.025635766, y: -0.05575451, z: 0.0014320099, w: 0.99811435}
-  m_LocalPosition: {x: 1.2613101, y: 2.3682475, z: -2.2844992}
+  m_LocalRotation: {x: -0.00000005960465, y: -0.00000020670713, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.35, z: 0.099999905}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7325773989715527902}
-  m_LocalEulerAnglesHint: {x: 0, y: -25.673, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 89.427, z: 0}
 --- !u!114 &7015746081765601851
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -736,11 +735,11 @@ MonoBehaviour:
   m_StreamingVersion: 20241001
   m_LegacyPriority: 0
   Target:
-    TrackingTarget: {fileID: 5129739859196743992}
+    TrackingTarget: {fileID: 1948200196477955899}
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
-    FieldOfView: 60.000004
+    FieldOfView: 90
     OrthographicSize: 5
     NearClipPlane: 0.3
     FarClipPlane: 50000
@@ -759,7 +758,7 @@ MonoBehaviour:
       BarrelClipping: 0.25
       Anamorphism: 0
   BlendHint: 0
---- !u!114 &4155025521072879112
+--- !u!114 &6522159904927841244
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -768,36 +767,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 6268659593928424200}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 625c14eee3ad46c99df7c7c891ef668a, type: 3}
+  m_Script: {fileID: 11500000, guid: 62d54399b04b4fa48a73e121d4937dd4, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineThirdPersonFollow
-  Damping: {x: 0.1, y: 0.5, z: 0.3}
-  ShoulderOffset: {x: 1.26, y: 0.72, z: -0.32}
-  VerticalArmLength: 0.4
-  CameraSide: 1
-  CameraDistance: 2
-  AvoidObstacles:
-    Enabled: 0
-    CollisionFilter:
-      serializedVersion: 2
-      m_Bits: 1
-    IgnoreTag: 
-    CameraRadius: 0.2
-    DampingIntoCollision: 0
-    DampingFromCollision: 0.5
---- !u!114 &8328301000423023314
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6268659593928424200}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e8b78ac948f05a46a6d8339a503172b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineHardLookAt
-  LookAtOffset: {x: 1, y: 1, z: 0}
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachinePanTilt
+  ReferenceFrame: 0
+  RecenterTarget: 0
+  PanAxis:
+    Value: 0
+    Center: 0
+    Range: {x: -180, y: 180}
+    Wrap: 1
+    Recentering:
+      Enabled: 0
+      Wait: 1
+      Time: 2
+    Restrictions: 0
+  TiltAxis:
+    Value: 0
+    Center: 0
+    Range: {x: -70, y: 70}
+    Wrap: 0
+    Recentering:
+      Enabled: 0
+      Wait: 1
+      Time: 2
+    Restrictions: 0
 --- !u!1 &7020241106117507846
 GameObject:
   m_ObjectHideFlags: 0
@@ -810,8 +804,9 @@ GameObject:
   - component: {fileID: 6991529336145631918}
   - component: {fileID: 3949551433306806713}
   - component: {fileID: 6235256917844773200}
-  - component: {fileID: 5740184989797856212}
   - component: {fileID: 3855489919262232249}
+  - component: {fileID: 792607071867861814}
+  - component: {fileID: 5740184989797856212}
   - component: {fileID: 1750332518955446462}
   - component: {fileID: 7049554734281676108}
   - component: {fileID: 5719639285464878529}
@@ -873,9 +868,9 @@ MonoBehaviour:
   entity: {fileID: 0}
   maxSpeed:
     forward: 2
-    backward: 1
-    left: 1.2
-    right: 1.2
+    backward: 1.5
+    left: 1.5
+    right: 1.5
   acceleration: 5
   currentMaxSpeed:
     forward: 0
@@ -898,28 +893,9 @@ MonoBehaviour:
   entity: {fileID: 0}
   sprintMult:
     forward: 2
-    backward: 1
-    left: 1
-    right: 1
---- !u!114 &5740184989797856212
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7020241106117507846}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f570408f610c25b449de1e4f68ad8309, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RigLook
-  entity: {fileID: 0}
-  yawSensitivity: 0.5
-  pitchSensitivity: 0.5
-  constraint: {fileID: 6423967998348038440}
-  bodyTurnThreshold: 5
-  bodyTurnSpeed: 10
-  panTilt: {fileID: 2676813588612431382}
+    backward: 1.5
+    left: 1.5
+    right: 1.5
 --- !u!114 &3855489919262232249
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -935,6 +911,34 @@ MonoBehaviour:
   entity: {fileID: 0}
   cam1: {fileID: 7952019114987096527}
   cam2: {fileID: 7015746081765601851}
+--- !u!114 &792607071867861814
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7020241106117507846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97bb9734640d44c4985639c779897c49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CinemachineLook
+  entity: {fileID: 0}
+  yawSensitivity: 0.5
+  pitchSensitivity: 0.5
+  pitchLimits: {x: -60, y: 40}
+--- !u!114 &5740184989797856212
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7020241106117507846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f570408f610c25b449de1e4f68ad8309, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RigLook
 --- !u!114 &1750332518955446462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2149,7 +2153,7 @@ MonoBehaviour:
   DistanceFrom: {fileID: 0}
   AutoHelperOffset: 1
   HelperOffset: {x: -2.2073614e-10, y: 0.0063084164, z: -0.00044765978}
-  GravityEffectForce: {x: 0, y: 0, z: 0}
+  GravityEffectForce: {x: 0, y: -0.1, z: 0}
   GravityHeavyness: 2
   _editor_Title: ' Bones Stimulator'
   _editor_DrawSetup: 1
@@ -2158,14 +2162,14 @@ MonoBehaviour:
   _editor_DrawGizmos: 1
   DrawGizmos: 1
   _editor_SelCategory: 0
-  UpdateRate: 0
-  MovementMuscles: 1
-  MusclesRapidity: 0.836
-  Damping: 0.596
-  Smoothing: 0.4
-  MildRotation: 0.641
+  UpdateRate: 60
+  MovementMuscles: 0.45
+  MusclesRapidity: 0.3
+  Damping: 0.85
+  Smoothing: 0.7
+  MildRotation: 0.8
   MotionInfluence: 1
-  RotationSpaceMuscles: 0
+  RotationSpaceMuscles: 0.1
   UseEulerRotation: 0
   EnsureRotation: 0
   RotationsRapidity: 0.7
@@ -2176,21 +2180,21 @@ MonoBehaviour:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0.5918112
+      value: 1
       inSlope: 0
       outSlope: 0
-      tangentMode: 0
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
       time: 1
-      value: 0.79448146
-      inSlope: -0.12087675
-      outSlope: -0.12087675
-      tangentMode: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
       weightedMode: 0
-      inWeight: 0.14168614
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2

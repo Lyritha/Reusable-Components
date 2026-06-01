@@ -22,9 +22,20 @@ public class Look : InputListener
             }
         }
 
-        yaw = transform.eulerAngles.y;
+        yaw = WrapAngle(transform.eulerAngles.y);
 
         AddSubscription(e => e.OnLookDelta += OnLook, e => e.OnLookDelta -= OnLook);
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+
+        // wrap by default, clamp in derived classes if needed
+        yaw += lookInput.x * yawSensitivity;
+        yaw = WrapAngle(yaw);
+
+        pitch -= lookInput.y * pitchSensitivity;
     }
 
     public void OnLook(Vector2 dir) => lookInput = dir;
@@ -36,5 +47,13 @@ public class Look : InputListener
         yaw = other.yaw;
         pitch = other.pitch;
         lookInput = other.lookInput;
+    }
+
+    protected static float WrapAngle(float angle)
+    {
+        angle %= 360f;
+        if (angle > 180f) angle -= 360f;
+        else if (angle < -180f) angle += 360f;
+        return angle;
     }
 }
