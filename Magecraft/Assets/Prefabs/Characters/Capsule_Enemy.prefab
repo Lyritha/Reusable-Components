@@ -190,7 +190,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RotateTowardsTarget
   lockToYRotation: 1
-  characterControllerId: 0
+  entityId: 0
 --- !u!223 &4881708811536882741
 Canvas:
   m_ObjectHideFlags: 0
@@ -381,6 +381,7 @@ GameObject:
   - component: {fileID: 1439463904054546508}
   - component: {fileID: 127030566594708644}
   - component: {fileID: 8995686100737852300}
+  - component: {fileID: 6469254661137335261}
   - component: {fileID: 858207752904834494}
   - component: {fileID: 4266381449580389851}
   m_Layer: 0
@@ -500,6 +501,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyInput
   forcedId: -1
+  Id: 0
 --- !u!114 &127030566594708644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -512,11 +514,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec8663eadf5bb6d4da369b5510f46d52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CharacterWalk
+  entity: {fileID: 0}
   maxSpeed:
-    forward: 1
-    backward: 1
-    left: 1
-    right: 1
+    forward: 2
+    backward: 1.5
+    left: 1.5
+    right: 1.5
   acceleration: 6
   currentMaxSpeed:
     forward: 0
@@ -539,6 +542,22 @@ MonoBehaviour:
   health:
     maxValue: 100
     currentValue: 0
+--- !u!114 &6469254661137335261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8405295724060196731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee784a4b27ec7924abbb3715aa08389c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SimpleLook
+  entity: {fileID: 0}
+  yawSensitivity: 0.5
+  pitchSensitivity: 0.5
+  pitchLimits: {x: -60, y: 40}
 --- !u!54 &858207752904834494
 Rigidbody:
   m_ObjectHideFlags: 0
