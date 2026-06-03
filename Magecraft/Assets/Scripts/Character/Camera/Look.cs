@@ -24,7 +24,7 @@ public class Look : InputListener
 
         yaw = WrapAngle(transform.eulerAngles.y);
 
-        AddSubscription(e => e.OnLookDelta += OnLook, e => e.OnLookDelta -= OnLook);
+        AddSubscription(e => e.OnLookDelta.OnEvent += OnLook, e => e.OnLookDelta.OnEvent -= OnLook);
     }
 
     protected override void Update()

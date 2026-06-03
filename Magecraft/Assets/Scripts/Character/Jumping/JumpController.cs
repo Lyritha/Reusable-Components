@@ -25,7 +25,7 @@ public class JumpController : InputListener
         rb = GetComponent<Rigidbody>();
         col = GetComponent<Collider>();
 
-        AddSubscription(e => e.OnJump += OnJump, e => e.OnJump -= OnJump);
+        AddSubscription(e => e.OnJump.OnEvent += OnJump, e => e.OnJump.OnEvent -= OnJump);
     }
 
     protected virtual void OnJump()

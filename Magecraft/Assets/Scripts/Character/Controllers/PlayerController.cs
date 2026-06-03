@@ -1,10 +1,13 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using CallbackContext = UnityEngine.InputSystem.InputAction.CallbackContext;
+
 
 public class PlayerController : EntityController
 {
     private InputSystem_Actions actions;
+
 
     protected override void Awake()
     {
@@ -26,6 +29,7 @@ public class PlayerController : EntityController
         actions.Player.Tab.performed += OnTabInput;
         actions.Player.Jump.performed += OnJumpInput;
         actions.Player.NumberKey.performed += OnNumberSelectedInput;
+        actions.Player.Inventory.performed += OnInventoryInput;
     }
 
     private void OnDisable()
@@ -40,31 +44,40 @@ public class PlayerController : EntityController
         actions.Player.Tab.performed -= OnTabInput;
         actions.Player.Jump.performed -= OnJumpInput;
         actions.Player.NumberKey.performed -= OnNumberSelectedInput;
+        actions.Player.Inventory.performed -= OnInventoryInput;
 
         actions.Disable();
     }
 
 
-    private void Bind(InputAction action, Action<InputAction.CallbackContext> callback)
+    private void Bind(InputAction action, Action<CallbackContext> callback)
     {
         action.performed += callback;
         action.canceled += callback;
     }
-    private void Unbind(InputAction action, Action<InputAction.CallbackContext> callback)
+    private void Unbind(InputAction action, Action<CallbackContext> callback)
     {
         action.performed -= callback;
         action.canceled -= callback;
     }
 
 
-    private void OnMoveInput(InputAction.CallbackContext ctx) => RaiseMove(ctx.ReadValue<Vector2>());
-    private void OnLookInput(InputAction.CallbackContext ctx) => RaiseLookDelta(ctx.ReadValue<Vector2>());
-    private void OnSprintInput(InputAction.CallbackContext ctx) => RaiseSprint(ctx.ReadValue<float>() > 0.5f);
-    private void OnJumpInput(InputAction.CallbackContext ctx) => RaiseJump();
-    private void OnAttackInput(InputAction.CallbackContext ctx) => RaisePrimaryMouse(ctx.ReadValue<float>() > 0.5f);
-    private void OnSecondaryAttackInput(InputAction.CallbackContext ctx) => RaiseSecondaryMouse(ctx.ReadValue<float>() > 0.5f);
-    private void OnInteractInput(InputAction.CallbackContext ctx) => RaiseInteract();
+    // input callbacks that raise the appropriate events with the correct value types
+    private void OnMoveInput(CallbackContext ctx) => OnMove.Raise(GetVector2(ctx), ActiveLayer);
+    private void OnLookInput(CallbackContext ctx) => OnLookDelta.Raise(GetVector2(ctx), ActiveLayer);
+    private void OnSprintInput(CallbackContext ctx) => OnSprint.Raise(GetBool(ctx), ActiveLayer);
+    private void OnJumpInput(CallbackContext ctx) => OnJump.Raise(ActiveLayer);
+    private void OnAttackInput(CallbackContext ctx) => OnPrimaryMouse.Raise(GetBool(ctx), ActiveLayer);
+    private void OnSecondaryAttackInput(CallbackContext ctx) => OnSecondaryMouse.Raise(GetBool(ctx), ActiveLayer);
+    private void OnInteractInput(CallbackContext ctx) => OnInteract.Raise(ActiveLayer);
+    private void OnInventoryInput(CallbackContext ctx) => OnInventory.Raise(ActiveLayer);
+    private void OnTabInput(CallbackContext ctx) => OnTab.Raise(ActiveLayer);
+    private void OnNumberSelectedInput(CallbackContext ctx) => OnNumberSelected.Raise(GetNumber(ctx), ActiveLayer);
 
-    private void OnTabInput(InputAction.CallbackContext ctx) => RaiseTab();
-    private void OnNumberSelectedInput(InputAction.CallbackContext ctx) => RaiseNumberSelected(int.Parse(ctx.control.displayName));
+
+    // utility functions to convert input values to the appropriate types for events
+    private Vector2 GetVector2(CallbackContext ctx) => ctx.ReadValue<Vector2>();
+    private float GetFloat(CallbackContext ctx) => ctx.ReadValue<float>();
+    private bool GetBool(CallbackContext ctx) => ctx.ReadValue<float>() > 0.5f;
+    private int GetNumber(CallbackContext ctx) => int.Parse(ctx.control.displayName);
 }

@@ -10,7 +10,7 @@ public class WeaponManager : InputListener
 
     private void Awake()
     {
-        AddSubscription(e => e.OnNumberSelected += OnNumberSelected, e => e.OnNumberSelected -= OnNumberSelected);
+        AddSubscription(e => e.OnNumberSelected.OnEvent += OnNumberSelected, e => e.OnNumberSelected.OnEvent -= OnNumberSelected);
         OnNumberSelected(1);
     }
 

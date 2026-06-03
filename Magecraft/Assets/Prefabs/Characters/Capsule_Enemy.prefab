@@ -150,6 +150,7 @@ GameObject:
   - component: {fileID: 4881708811536882741}
   - component: {fileID: 4952794526549676934}
   - component: {fileID: 4141639254491594907}
+  - component: {fileID: 314139117319750337}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -254,6 +255,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &314139117319750337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3703909122537573586}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ce969de064205ec49b1007d3252a79ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthComponent
+  healthSlider: {fileID: 8818186572305966276}
 --- !u!1 &3932106618092924995
 GameObject:
   m_ObjectHideFlags: 0
@@ -380,7 +394,8 @@ GameObject:
   - component: {fileID: 5192243557203417478}
   - component: {fileID: 1439463904054546508}
   - component: {fileID: 127030566594708644}
-  - component: {fileID: 8995686100737852300}
+  - component: {fileID: 7674896910397287174}
+  - component: {fileID: 1692921820988570760}
   - component: {fileID: 6469254661137335261}
   - component: {fileID: 858207752904834494}
   - component: {fileID: 4266381449580389851}
@@ -500,8 +515,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0a1d4e9d2b0b8bd48a7a3fa60fa6ebd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyInput
+  makeInstance: 1
   forcedId: -1
   Id: 0
+  ActiveLayer: 0
 --- !u!114 &127030566594708644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -526,7 +543,7 @@ MonoBehaviour:
     backward: 0
     left: 0
     right: 0
---- !u!114 &8995686100737852300
+--- !u!114 &7674896910397287174
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -535,13 +552,60 @@ MonoBehaviour:
   m_GameObject: {fileID: 8405295724060196731}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce969de064205ec49b1007d3252a79ec, type: 3}
+  m_Script: {fileID: 11500000, guid: 39b563f69038e6547b98870753c66023, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::CharacterHealth
-  healthSlider: {fileID: 8818186572305966276}
-  health:
-    maxValue: 100
-    currentValue: 0
+  m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
+  maxValue: 100
+  currentValue: 0
+  OnRestored:
+    m_PersistentCalls:
+      m_Calls: []
+  OnReduced:
+    m_PersistentCalls:
+      m_Calls: []
+  OnValueChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 314139117319750337}
+        m_TargetAssemblyTypeName: HealthBar, Assembly-CSharp
+        m_MethodName: UpdateUI
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  OnDepleted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1692921820988570760}
+        m_TargetAssemblyTypeName: DissolveDestroyObject, Assembly-CSharp
+        m_MethodName: TriggerDestroy
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1692921820988570760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8405295724060196731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 56ddfc6c2ac11af40a70e2ac49d13535, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DissolveDestroyObject
+  dissolveTime: 0.2
 --- !u!114 &6469254661137335261
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -10,7 +10,7 @@ public class CinemachineCullingMask : MonoBehaviour
     private CinemachineCameraEvents cameraEvents;
     private CinemachineBrain brain;
 
-    void Start()
+    private void Start()
     {
         cameraEvents = GetComponent<CinemachineCameraEvents>();
         brain = FindFirstObjectByType<CinemachineBrain>();
@@ -18,9 +18,5 @@ public class CinemachineCullingMask : MonoBehaviour
         cameraEvents.CameraActivatedEvent.AddListener(OnCameraActivated);
     }
 
-    void OnCameraActivated(ICinemachineMixer mixer, ICinemachineCamera cam)
-    {
-        Debug.Log($"Camera Activated: {gameObject}");
-        brain.OutputCamera.cullingMask = targetCullingMask;
-    }
+    private void OnCameraActivated(ICinemachineMixer mixer, ICinemachineCamera cam) => brain.OutputCamera.cullingMask = targetCullingMask;
 }

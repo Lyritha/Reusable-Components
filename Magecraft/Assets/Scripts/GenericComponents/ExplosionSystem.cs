@@ -1,67 +1,57 @@
-using System;
 using UnityEngine;
+using UnityEngine.Events;
 
-[Serializable]
-public class ExplosionSystem
+public class ExplosionSystem : MonoBehaviour
 {
-    [SerializeField]
-    private int damage = 50;
-    [SerializeField]
-    private float radius = 5;
-    [SerializeField, Tooltip("If force = 0, apply no force at all to any object")]
-    private float force = 100;
-    [SerializeField]
-    private GameObject explosionPrefab;
+    [Header("Explosion Settings")]
+    [SerializeField] private int damage = 50;
+    [SerializeField] private float radius = 5f;
+    [SerializeField, Tooltip("If force = 0, no force will be applied to any object.")]
+    private float force = 100f;
+    [SerializeField] private GameObject explosionPrefab;
+    [SerializeField] private bool useLineOfSight = true;
 
-    public Action OnExploded;
+    [Header("Events")]
+    public UnityEvent ExplosionStarted = new();
+    public UnityEvent ExplosionFinished = new();
 
-    private GameObject gameObject;
-    private bool useLineOfSight = true;
-    private bool isInitilized = false;
-    private bool isExploding = false;
+    private bool exploding = false;
 
-    public void Initialize(GameObject gameObject, bool useLineOfSight = true)
+    public void TriggerExplosion()
     {
-        this.gameObject = gameObject;
-        this.useLineOfSight = useLineOfSight;
+        if (exploding) return;
+        exploding = true;
 
-        isInitilized = true;
-        isExploding = false;
-    }
+        Vector3 origin = transform.position;
+        float forceRadius = radius * 2f;
 
+        ExplosionStarted?.Invoke();
 
-    public void Explode()
-    {
-        if (!isInitilized)
-        {
-            Debug.LogWarning("Tried to use explosion system, but it has not been initialized yet");
-            return;
-        }
+        if (explosionPrefab != null)
+            Instantiate(explosionPrefab, origin, Quaternion.identity);
 
-        if (isExploding) return;
-        isExploding = true;
-
-        Vector3 pos = gameObject.transform.position;
-        float forceRadius = 2 * radius;
-
-        if (explosionPrefab != null) GameObject.Instantiate(explosionPrefab, pos, Quaternion.identity);
-
-        foreach (Collider col in Physics.OverlapSphere(pos, radius))
+        foreach (Collider col in Physics.OverlapSphere(origin, radius))
         {
             if (col.gameObject == gameObject) continue;
-            if (useLineOfSight && !HasLineOfSight(pos, col)) continue;
+            if (useLineOfSight && !HasLineOfSight(origin, col)) continue;
 
             if (col.TryGetComponent(out IExplodeable explodeable))
-                explodeable.Explode(damage, pos, radius, forceRadius, force);
-            else if (col.TryGetComponent(out IDamageable dmg))
-                dmg.TakeDamage(damage, pos, (col.transform.position - pos).normalized);
+            {
+                explodeable.Explode(damage, origin, radius, forceRadius, force);
+            }
+            else if (col.TryGetComponent(out IDamageable damageable))
+            {
+                Vector3 direction = (col.transform.position - origin).normalized;
+                damageable.TakeDamage(damage, origin, direction);
+            }
 
             Rigidbody rb = col.attachedRigidbody;
-            bool canApplyForce = rb != null && !rb.isKinematic && force > 0;
-            if (canApplyForce) rb.AddExplosionForce(force, pos, forceRadius);
+            bool canApplyForce = rb != null && !rb.isKinematic && force > 0f;
+
+            if (canApplyForce) rb.AddExplosionForce(force, origin, forceRadius);
         }
 
-        OnExploded?.Invoke();
+        ExplosionFinished?.Invoke();
     }
 
     private static bool HasLineOfSight(Vector3 origin, Collider target)
@@ -73,8 +63,6 @@ public class ExplosionSystem
         {
             if (hit.collider == target) return true;
             if (Vector3.Distance(origin, hit.point) < 1f) continue;
-
-            // Ignore explodable objects
             if (hit.collider.TryGetComponent(out IExplodeable _)) continue;
 
             return false;
@@ -83,15 +71,16 @@ public class ExplosionSystem
         return true;
     }
 
-    public void Gizmo(GameObject obj = null)
+    private void OnDrawGizmosSelected()
     {
-        GameObject gizmoObj = gameObject == null ? obj : gameObject;
-        if (gizmoObj == null) return;
+        Vector3 pos = transform.position;
 
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(gizmoObj.transform.position, radius);
+        Gizmos.DrawWireSphere(pos, radius);
+
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(gizmoObj.transform.position, radius * 2);
+        Gizmos.DrawWireSphere(pos, radius * 2f);
+
         Gizmos.color = Color.white;
     }
 }

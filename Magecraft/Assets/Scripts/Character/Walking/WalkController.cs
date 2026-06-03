@@ -21,8 +21,8 @@ public partial class WalkController : InputListener
         currentMaxSpeed = maxSpeed;
 
         AddSubscription(
-             ec => ec.OnMove += OnMove,
-             ec => ec.OnMove -= OnMove
+             ec => ec.OnMove.OnEvent += OnMove,
+             ec => ec.OnMove.OnEvent -= OnMove
          );
     }
 

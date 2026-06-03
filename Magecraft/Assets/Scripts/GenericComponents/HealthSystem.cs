@@ -1,8 +1,9 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 
 [Serializable]
-public class HealthSystem
+public class HealthSystem : MonoBehaviour, IDamageable
 {
     [SerializeField]
     private int maxValue = 100;
@@ -12,19 +13,19 @@ public class HealthSystem
     /// <summary>
     /// Amount restored (e.g., healing or shield regeneration), clamped to max value.
     /// </summary>
-    public Action<int> OnRestored;
+    public UnityEvent<int> OnRestored;
     /// <summary>
     /// Amount reduced (e.g., damage taken), clamped to zero.
     /// </summary>
-    public Action<int> OnReduced;
+    public UnityEvent<int> OnReduced;
     /// <summary>
     /// Current and maximum value (e.g., health, shield, armor).
     /// </summary>
-    public Action<int, int> OnValueChanged;
+    public UnityEvent<int, int> OnValueChanged;
     /// <summary>
     /// Triggered when the value reaches zero (e.g., death, shield break).
     /// </summary>
-    public Action OnDepleted;
+    public UnityEvent OnDepleted;
 
 
     private bool isInitialized = false;
@@ -34,7 +35,7 @@ public class HealthSystem
     public int MaxValue => maxValue;
     public bool IsDepleted => isDepleted;
 
-    public void Initialize()
+    private void Awake()
     {
         if (isInitialized) throw new InvalidOperationException("HealthSystem.Initialize() called twice.");
 
@@ -82,5 +83,10 @@ public class HealthSystem
         }
 
         return damage;
+    }
+
+    public void TakeDamage(int amount, Vector3 hitPoint, Vector3 hitDirection)
+    {
+        Reduce(amount);
     }
 }

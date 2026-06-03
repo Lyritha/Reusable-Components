@@ -11,7 +11,9 @@ public abstract class IdentifiableBehaviour<T> : MonoBehaviour where T : Identif
     private static int pendingForcedCount = 0;
     private static bool forcedPhaseComplete = false;
 
-    [SerializeField, Tooltip("If not -1, force a specific ID for this (or the parent class) type")]
+    [Header("Instance Management"), SerializeField, Tooltip("If not -1, force a specific ID for this (or the parent class) type")]
+    protected bool makeInstance = true;
+    [SerializeField]
     private int forcedId = -1;
     [SerializeField, ShowOnly]
     private int Id = 0;
@@ -20,6 +22,13 @@ public abstract class IdentifiableBehaviour<T> : MonoBehaviour where T : Identif
 
     protected virtual void Awake()
     {
+        if (!makeInstance)
+        {
+            forcedId = -1;
+            Id = -1;
+            return;
+        }
+
         if (InstanceId != uint.MaxValue) return;
 
         if (forcedId >= 0)

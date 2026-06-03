@@ -14,7 +14,7 @@ public class SwitchCamera : InputListener
 
     private void Awake()
     {
-        AddSubscription(e => e.OnTab += OnTab, e => e.OnTab -= OnTab);
+        AddSubscription(e => e.OnTab.OnEvent += OnTab, e => e.OnTab.OnEvent -= OnTab);
 
         look = gameObject.GetComponent<CinemachineLook>();
         look.Initialize(cam1.GetComponent<CinemachinePanTilt>());

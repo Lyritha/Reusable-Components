@@ -14,6 +14,9 @@ GameObject:
   - component: {fileID: 7930136098316786968}
   - component: {fileID: 5433593642276148098}
   - component: {fileID: 1709532019652911586}
+  - component: {fileID: 2325471699907107194}
+  - component: {fileID: 2898003588319273705}
+  - component: {fileID: 5344161738859593255}
   m_Layer: 0
   m_Name: Barrel
   m_TagString: Untagged
@@ -155,14 +158,106 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4d3547875cd3124db16109c11032aa1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ExplosiveBarrel
-  health:
-    maxValue: 100
-    currentValue: 0
-  explosionSystem:
-    damage: 50
-    radius: 5
-    force: 100
-    explosionPrefab: {fileID: 3437918817745226434, guid: 8e4e7a0aafdecab4b8003fada133584a, type: 3}
+  OnBarrelExploded:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2898003588319273705}
+        m_TargetAssemblyTypeName: ExplosionSystem, Assembly-CSharp
+        m_MethodName: TriggerExplosion
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2325471699907107194
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3133365438004418510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b563f69038e6547b98870753c66023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
+  maxValue: 100
+  currentValue: 0
+  OnRestored:
+    m_PersistentCalls:
+      m_Calls: []
+  OnReduced:
+    m_PersistentCalls:
+      m_Calls: []
+  OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDepleted:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2898003588319273705}
+        m_TargetAssemblyTypeName: ExplosionSystem, Assembly-CSharp
+        m_MethodName: TriggerExplosion
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &2898003588319273705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3133365438004418510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6db4b370952e314d8c3292732695d38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ExplosionSystem
+  damage: 50
+  radius: 3
+  force: 100
+  explosionPrefab: {fileID: 3437918817745226434, guid: 8e4e7a0aafdecab4b8003fada133584a, type: 3}
+  useLineOfSight: 1
+  ExplosionStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  ExplosionFinished:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5344161738859593255}
+        m_TargetAssemblyTypeName: SimpleDestroyObject, Assembly-CSharp
+        m_MethodName: TriggerDestroy
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &5344161738859593255
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3133365438004418510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 826ed48006bc5794d82724a32b963dfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SimpleDestroyObject
 --- !u!1 &6599977059374379692
 GameObject:
   m_ObjectHideFlags: 0

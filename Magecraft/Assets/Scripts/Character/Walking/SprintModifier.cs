@@ -11,8 +11,8 @@ public class SprintModifier : InputListener
     protected void Awake()
     {
         AddSubscription(
-             ec => ec.OnSprint += OnSprint,
-             ec => ec.OnSprint -= OnSprint
+             ec => ec.OnSprint.OnEvent += OnSprint,
+             ec => ec.OnSprint.OnEvent -= OnSprint
          );
     }
 

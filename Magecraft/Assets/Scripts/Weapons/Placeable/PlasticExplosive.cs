@@ -1,33 +1,26 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlasticExplosive : MonoBehaviour, IInteractable, IExplodeable
+public class PlasticExplosive : MonoBehaviour, IExplodeable
 {
-    [SerializeField, Header("Explosion settings")]
-    private ExplosionSystem explosionSystem;
-    [SerializeField]
-    private int explosionDelay = 5;
+    private static WaitForSeconds _waitForSeconds0_25 = new(0.25f);
 
     [SerializeField, Header("Audio")]
     private AudioSource audioSource;
     [SerializeField]
     private AudioClip tickSound;
 
+    public UnityEvent OnExploded = new();
+    private Coroutine tickingRoutine;
 
     private Rigidbody rb;
     private bool started = false;
     private Vector3 rayDir = Vector3.zero;
 
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody>();
+    private void Awake() => rb = GetComponent<Rigidbody>();
 
-        explosionSystem.Initialize(gameObject);
-        explosionSystem.OnExploded += OnExploded;
-    }
-
-    private void OnDisable() => explosionSystem.OnExploded -= OnExploded;
     public void Initialize(Vector3 normal) => rayDir = -normal;
 
 
@@ -46,36 +39,29 @@ public class PlasticExplosive : MonoBehaviour, IInteractable, IExplodeable
         rb.isKinematic = isKinematic;
     }
 
-    public void Interact()
+    public void OnCountdownProgress(float normalized)
     {
-        if (started) return;
-        started = true;
-
-        StartCoroutine(Countdown());
+        // Start ticking when countdown begins
+        tickingRoutine ??= StartCoroutine(TickingRoutine());
+        currentTickInterval = Mathf.Lerp(0.8f, 0.05f, 1f - normalized);
     }
 
-    private IEnumerator Countdown()
-    {
-        float timeLeft = explosionDelay;
+    private float currentTickInterval = 0.8f;
 
-        while (timeLeft > 0f)
+    private IEnumerator TickingRoutine()
+    {
+        while (true)
         {
-            float t = 1f - (timeLeft / explosionDelay);
-
-            float tickInterval = Mathf.Lerp(1.0f, 0.1f, t);
-
-            audioSource.pitch = Mathf.Lerp(1f, 2f, t);
             audioSource.PlayOneShot(tickSound);
-            audioSource.pitch = 1f;
-
-            yield return new WaitForSeconds(tickInterval);
-
-            timeLeft -= tickInterval;
+            yield return new WaitForSeconds(currentTickInterval);
         }
-
-
-        StartCoroutine(ExplodeDelayed());
     }
+
+    public void OnCountdownEnded()
+    {
+        if (tickingRoutine != null) StopCoroutine(tickingRoutine);
+    }
+
 
     public void Explode(int _, Vector3 __, float ___, float ____, float _____)
     {
@@ -88,9 +74,7 @@ public class PlasticExplosive : MonoBehaviour, IInteractable, IExplodeable
 
     private IEnumerator ExplodeDelayed()
     {
-        yield return new WaitForSeconds(0.25f);
-        explosionSystem.Explode();
+        yield return _waitForSeconds0_25;
+        OnExploded?.Invoke();
     }
-
-    private void OnExploded() => Destroy(gameObject);
 }
