@@ -267,7 +267,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce969de064205ec49b1007d3252a79ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthComponent
-  healthSlider: {fileID: 8818186572305966276}
+  statSlider: {fileID: 8818186572305966276}
 --- !u!1 &3932106618092924995
 GameObject:
   m_ObjectHideFlags: 0

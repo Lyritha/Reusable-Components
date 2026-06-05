@@ -1,17 +1,21 @@
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
+[RequireComponent(typeof(MultiAimConstraint))]
 public class RigLook : MonoBehaviour
 {
-    private CinemachineLook panTiltSource;
+    //private CinemachineLook panTiltSource;
 
     private MultiAimConstraint constraint;
     private Transform head;
     private Transform target;
 
+    private Look look;
+
     private void Awake()
     {
-        constraint = GetComponentInChildren<MultiAimConstraint>();
+        constraint = GetComponent<MultiAimConstraint>();
+        look = GetComponentInParent<Look>();
 
         head = constraint.data.constrainedObject;
         target = constraint.data.sourceObjects[0].transform;
@@ -23,15 +27,12 @@ public class RigLook : MonoBehaviour
         target.SetParent(null, true);
     }
 
-    private void Update()
+    private void LateUpdate()
     {
-        if (panTiltSource == null) panTiltSource = GetComponent<CinemachineLook>();
+        float pitch = Mathf.Clamp(look.Pitch, constraint.data.limits.x, constraint.data.limits.y);
 
-        if (panTiltSource != null)
-        {
-            Vector3 camForward = panTiltSource.PanTilt.transform.forward;
-            target.position = head.position + camForward * 1f;
-        }
+        Vector3 camForward = Camera.main.transform.forward;
+        target.position = head.position + camForward * 1f;
     }
 
 }

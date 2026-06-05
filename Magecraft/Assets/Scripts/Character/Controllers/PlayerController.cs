@@ -8,7 +8,6 @@ public class PlayerController : EntityController
 {
     private InputSystem_Actions actions;
 
-
     protected override void Awake()
     {
         base.Awake();
@@ -63,16 +62,16 @@ public class PlayerController : EntityController
 
 
     // input callbacks that raise the appropriate events with the correct value types
-    private void OnMoveInput(CallbackContext ctx) => OnMove.Raise(GetVector2(ctx), ActiveLayer);
-    private void OnLookInput(CallbackContext ctx) => OnLookDelta.Raise(GetVector2(ctx), ActiveLayer);
-    private void OnSprintInput(CallbackContext ctx) => OnSprint.Raise(GetBool(ctx), ActiveLayer);
-    private void OnJumpInput(CallbackContext ctx) => OnJump.Raise(ActiveLayer);
-    private void OnAttackInput(CallbackContext ctx) => OnPrimaryMouse.Raise(GetBool(ctx), ActiveLayer);
-    private void OnSecondaryAttackInput(CallbackContext ctx) => OnSecondaryMouse.Raise(GetBool(ctx), ActiveLayer);
-    private void OnInteractInput(CallbackContext ctx) => OnInteract.Raise(ActiveLayer);
-    private void OnInventoryInput(CallbackContext ctx) => OnInventory.Raise(ActiveLayer);
-    private void OnTabInput(CallbackContext ctx) => OnTab.Raise(ActiveLayer);
-    private void OnNumberSelectedInput(CallbackContext ctx) => OnNumberSelected.Raise(GetNumber(ctx), ActiveLayer);
+    private void OnMoveInput(CallbackContext ctx) => Move.Raise(GetVector2(ctx), ActiveLayer);
+    private void OnLookInput(CallbackContext ctx) => LookDelta.Raise(GetVector2(ctx), ActiveLayer);
+    private void OnSprintInput(CallbackContext ctx) => Sprint.Raise(GetBool(ctx), ActiveLayer);
+    private void OnJumpInput(CallbackContext ctx) => Jump.Raise(ActiveLayer);
+    private void OnAttackInput(CallbackContext ctx) => PrimaryMouse.Raise(GetBool(ctx), ActiveLayer);
+    private void OnSecondaryAttackInput(CallbackContext ctx) => SecondaryMouse.Raise(GetBool(ctx), ActiveLayer);
+    private void OnInteractInput(CallbackContext ctx) => Interact.Raise(ActiveLayer);
+    private void OnInventoryInput(CallbackContext ctx) => Inventory.Raise(ActiveLayer);
+    private void OnTabInput(CallbackContext ctx) => Tab.Raise(ActiveLayer);
+    private void OnNumberSelectedInput(CallbackContext ctx) => NumberSelected.Raise(GetNumber(ctx), ActiveLayer);
 
 
     // utility functions to convert input values to the appropriate types for events

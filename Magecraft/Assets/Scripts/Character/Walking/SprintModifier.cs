@@ -10,9 +10,11 @@ public class SprintModifier : InputListener
 
     protected void Awake()
     {
+        if (TryGetComponent(out walkController)) originalMoveSpeed = walkController.MaxSpeed;
+
         AddSubscription(
-             ec => ec.OnSprint.OnEvent += OnSprint,
-             ec => ec.OnSprint.OnEvent -= OnSprint
+             ec => ec.Sprint.OnEvent += OnSprint,
+             ec => ec.Sprint.OnEvent -= OnSprint
          );
     }
 
@@ -22,6 +24,6 @@ public class SprintModifier : InputListener
         if (walkController == null && !TryGetComponent(out walkController)) return;
 
         if (isSprinting) originalMoveSpeed = walkController.MaxSpeed;
-        walkController.MaxSpeed = isSprinting ? originalMoveSpeed * sprintMult : originalMoveSpeed;
+        walkController.CurrentMaxSpeed = isSprinting ? originalMoveSpeed * sprintMult : originalMoveSpeed;
     }
 }

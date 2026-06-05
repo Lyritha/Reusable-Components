@@ -14,13 +14,13 @@ public class Countdown : MonoBehaviour
 
     private Coroutine countdownRoutine;
 
-    public void StartCountdown(float duration, bool reset)
+    public void StartCountdown(float duration, bool reset = false)
     {
         this.duration = duration;
         StartCountdown(reset);
     }
 
-    public void StartCountdown(bool reset)
+    public void StartCountdown(bool reset = false)
     {
         bool isRunning = countdownRoutine != null;
 

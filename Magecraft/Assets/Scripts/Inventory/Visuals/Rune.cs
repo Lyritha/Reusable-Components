@@ -15,7 +15,8 @@ public class Rune : MonoBehaviour, IGrabbable
 
     public bool IsGrabbed { get; private set; }
 
-    private Vector3 targetPos;
+    // Local-space target instead of world-space
+    private Vector3 targetLocalPos;
 
 
     public void Initialize(BulletModifier modifier)
@@ -26,7 +27,7 @@ public class Rune : MonoBehaviour, IGrabbable
     private void Awake()
     {
         originalLayer = gameObject.layer;
-        targetPos = transform.position;
+        targetLocalPos = transform.localPosition;
     }
 
     public void GrabStart(Vector3 grabberPos)
@@ -41,8 +42,11 @@ public class Rune : MonoBehaviour, IGrabbable
     {
         if (!IsGrabbed) return;
 
-        bool snap = table.TryGetSurfacePoint(grabberPos, true, out Vector3 snapped);
-        if (snap) targetPos = snapped;
+        if (table.TryGetSurfacePoint(grabberPos, true, out Vector3 snapped))
+        {
+            // Convert world → local
+            targetLocalPos = transform.parent.InverseTransformPoint(snapped);
+        }
     }
 
     public void GrabStop(Vector3 grabberPos)
@@ -53,16 +57,19 @@ public class Rune : MonoBehaviour, IGrabbable
         gameObject.layer = originalLayer;
 
         bool snap = table.TryGetSurfacePoint(grabberPos, false, out Vector3 snapped);
-        targetPos = snap ? snapped : grabberPos;
+        Vector3 worldTarget = snap ? snapped : grabberPos;
+
+        // Convert world → local
+        targetLocalPos = transform.parent.InverseTransformPoint(worldTarget);
     }
 
     private void Update()
     {
-        Vector3 pos = transform.position;
+        Vector3 pos = transform.localPosition;
 
-        float speed = Time.deltaTime * (Vector3.Distance(pos, targetPos) * 30);
+        float speed = Time.deltaTime * (Vector3.Distance(pos, targetLocalPos) * 30f);
         speed = Mathf.Max(speed, Time.deltaTime);
 
-        transform.position = Vector3.MoveTowards(pos, targetPos, speed);
+        transform.localPosition = Vector3.MoveTowards(pos, targetLocalPos, speed);
     }
 }

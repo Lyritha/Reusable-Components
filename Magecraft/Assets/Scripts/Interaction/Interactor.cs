@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public class RayInteractor : InputListener
+public class Interactor : InputListener
 {
     [SerializeField]
     private float maxDistance = 4;
@@ -15,7 +15,7 @@ public class RayInteractor : InputListener
         ContinuesRaycast.OnRayEntered += OnRayEntered;
         ContinuesRaycast.OnRayExited += OnRayExited;
 
-        AddSubscription(e => e.OnInteract.OnEvent += Interact, e => e.OnInteract.OnEvent -= Interact);
+        AddSubscription(e => e.Interact.OnEvent += Interact, e => e.Interact.OnEvent -= Interact);
     }
 
     protected override void OnDisable()

@@ -14,7 +14,7 @@ public class PlasticExplosivePlacer : PlaceableWeapon
 
     private void Awake()
     {
-        AddSubscription(e => e.OnPrimaryMouse.OnEvent += Place, e => e.OnPrimaryMouse.OnEvent -= Place);
+        AddSubscription(e => e.PrimaryMouse.OnEvent += Place, e => e.PrimaryMouse.OnEvent -= Place);
 
         // create clone to show where the explosive would be placed
         placeholderObj = GhostUtility.CreateGhost(plasticExplosivePrefab, gameObject.transform, false);

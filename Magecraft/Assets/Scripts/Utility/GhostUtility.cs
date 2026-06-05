@@ -20,11 +20,28 @@ public static class GhostUtility
 
         foreach (Renderer rend in ghost.GetComponentsInChildren<Renderer>())
         {
-            Color color = rend.material.color;
-            color.a = 0.25f;
+            // Create a NEW material instance so the original is untouched
+            Material ghostMat = new Material(rend.sharedMaterial);
 
-            rend.material.color = color;
+            // Switch to transparent mode (URP/Lit)
+            ghostMat.SetFloat("_Surface", 1); // Transparent
+            ghostMat.SetFloat("_Blend", 0);   // Alpha blend
+            ghostMat.SetFloat("_ZWrite", 0);  // Disable depth writes
+            ghostMat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+
+            // Optional: ensure correct blending
+            ghostMat.SetFloat("_SrcBlend", (float)UnityEngine.Rendering.BlendMode.SrcAlpha);
+            ghostMat.SetFloat("_DstBlend", (float)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+
+            // Apply ghost color
+            Color c = ghostMat.GetColor("_BaseColor");
+            c.a = 0.25f;
+            ghostMat.SetColor("_BaseColor", c);
+
+            // Assign the new material instance
+            rend.material = ghostMat;
         }
+
 
         ghost.SetActive(setActive);
         return ghost;

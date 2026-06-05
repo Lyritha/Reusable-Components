@@ -14,7 +14,7 @@ public class Grabber : InputListener
 
     private void Awake()
     {
-        AddSubscription(e => e.OnPrimaryMouse.OnEvent += OnAttack, e => e.OnPrimaryMouse.OnEvent -= OnAttack);
+        AddSubscription(e => e.PrimaryMouse.OnEvent += OnAttack, e => e.PrimaryMouse.OnEvent -= OnAttack);
     }
 
     private void OnAttack(bool pressed)

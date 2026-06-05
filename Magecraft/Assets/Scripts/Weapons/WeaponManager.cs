@@ -10,20 +10,20 @@ public class WeaponManager : InputListener
 
     private void Awake()
     {
-        AddSubscription(e => e.OnNumberSelected.OnEvent += OnNumberSelected, e => e.OnNumberSelected.OnEvent -= OnNumberSelected);
+        AddSubscription(e => e.NumberSelected.OnEvent += OnNumberSelected, e => e.NumberSelected.OnEvent -= OnNumberSelected);
         OnNumberSelected(1);
     }
 
     private void OnNumberSelected(int number)
     {
+        if (currentWeapon != null)
+        {
+            currentWeapon.SetActive(false);
+            Destroy(currentWeapon);
+        }
+
         if (number > 0 && number <= weapons.Count)
         {
-            if (currentWeapon != null)
-            {
-                currentWeapon.SetActive(false);
-                Destroy(currentWeapon);
-            }
-
             WeaponAsset selectedWeapon = weapons[number - 1];
             currentWeapon = Instantiate(selectedWeapon.weaponPrefab, transform, false);
             // Handle weapon selection logic here

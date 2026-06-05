@@ -5,8 +5,8 @@ public class Look : InputListener
     [SerializeField] protected float yawSensitivity = 0.5f;
     [SerializeField] protected float pitchSensitivity = 0.5f;
 
-    protected float yaw;
-    protected float pitch;
+    public float Yaw { get; protected set; }
+    public float Pitch { get; protected set; }
 
     protected Vector2 lookInput;
 
@@ -22,9 +22,9 @@ public class Look : InputListener
             }
         }
 
-        yaw = WrapAngle(transform.eulerAngles.y);
+        Yaw = WrapAngle(transform.eulerAngles.y);
 
-        AddSubscription(e => e.OnLookDelta.OnEvent += OnLook, e => e.OnLookDelta.OnEvent -= OnLook);
+        AddSubscription(e => e.LookDelta.OnEvent += OnLook, e => e.LookDelta.OnEvent -= OnLook);
     }
 
     protected override void Update()
@@ -32,10 +32,10 @@ public class Look : InputListener
         base.Update();
 
         // wrap by default, clamp in derived classes if needed
-        yaw += lookInput.x * yawSensitivity;
-        yaw = WrapAngle(yaw);
+        Yaw += lookInput.x * yawSensitivity;
+        Yaw = WrapAngle(Yaw);
 
-        pitch -= lookInput.y * pitchSensitivity;
+        Pitch -= lookInput.y * pitchSensitivity;
     }
 
     public void OnLook(Vector2 dir) => lookInput = dir;
@@ -44,8 +44,8 @@ public class Look : InputListener
     {
         yawSensitivity = other.yawSensitivity;
         pitchSensitivity = other.pitchSensitivity;
-        yaw = other.yaw;
-        pitch = other.pitch;
+        Yaw = other.Yaw;
+        Pitch = other.Pitch;
         lookInput = other.lookInput;
     }
 

@@ -10,14 +10,10 @@ public class SwitchCamera : InputListener
     private CinemachineCamera cam2;
 
     bool isCam1Active = true;
-    private CinemachineLook look;
 
     private void Awake()
     {
-        AddSubscription(e => e.OnTab.OnEvent += OnTab, e => e.OnTab.OnEvent -= OnTab);
-
-        look = gameObject.GetComponent<CinemachineLook>();
-        look.Initialize(cam1.GetComponent<CinemachinePanTilt>());
+        AddSubscription(e => e.Tab.OnEvent += OnTab, e => e.Tab.OnEvent -= OnTab);
     }
 
     private void OnTab()
@@ -28,6 +24,5 @@ public class SwitchCamera : InputListener
         cam2.Priority = isCam1Active ? 0 : 1;
 
         CinemachineCamera activeCam = isCam1Active ? cam1 : cam2;
-        look.Initialize(activeCam.GetComponent<CinemachinePanTilt>());
     }
 }

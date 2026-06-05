@@ -9,7 +9,7 @@ public class ShowInventory : InputListener
 
     private void Awake()
     {
-        AddSubscription(e => e.OnInventory.OnEvent += OnInventory, e => e.OnInventory.OnEvent -= OnInventory);
+        AddSubscription(e => e.Inventory.OnEvent += OnInventory, e => e.Inventory.OnEvent -= OnInventory);
     }
 
     private void OnInventory()
@@ -19,7 +19,7 @@ public class ShowInventory : InputListener
         if (inventoryOpen)
         {
             potionDisplay.gameObject.SetActive(true);
-            entity.ActiveLayer = Layer.UI;
+            entity.SetActiveLayer(Layer.UI);
             potionDisplay.ShowPotions(20);
 
             Cursor.lockState = CursorLockMode.None;
@@ -35,7 +35,7 @@ public class ShowInventory : InputListener
     private void AnimCompleted()
     {
         potionDisplay.gameObject.SetActive(false);
-        entity.ActiveLayer = Layer.Movement;
+        entity.SetActiveLayer(Layer.Movement);
 
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

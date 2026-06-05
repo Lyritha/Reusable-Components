@@ -95,4 +95,10 @@ public abstract class InputListener : MonoBehaviour
         if (entity == null) return;
         foreach (var (sub, unsub) in subs) unsub(entity);
     }
+
+    private void OnDestroy()
+    {
+        RemoveAllSubscriptions();
+
+    }
 }

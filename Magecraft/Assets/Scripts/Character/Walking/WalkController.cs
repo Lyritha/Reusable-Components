@@ -21,12 +21,15 @@ public partial class WalkController : InputListener
         currentMaxSpeed = maxSpeed;
 
         AddSubscription(
-             ec => ec.OnMove.OnEvent += OnMove,
-             ec => ec.OnMove.OnEvent -= OnMove
+             ec => ec.Move.OnEvent += OnMove,
+             ec => ec.Move.OnEvent -= OnMove
          );
     }
 
-    private void OnMove(Vector2 vector) => dir = vector;
+    private void OnMove(Vector2 vector)
+    {
+        dir = vector;
+    }
 
     protected virtual void FixedUpdate()
     {
@@ -42,6 +45,7 @@ public partial class WalkController : InputListener
 
     protected Vector2 GetLocalVelocity(Vector2 currentVel, Vector2 input, Movement4 speedMod, float accel)
     {
+
         Vector2 targetVel = Vector2.zero;
         if (input.sqrMagnitude > 0.1f)
         {
@@ -52,5 +56,6 @@ public partial class WalkController : InputListener
         return Vector2.MoveTowards(currentVel, targetVel, accel * Time.fixedDeltaTime);
     }
 
-    public Movement4 MaxSpeed { get { return currentMaxSpeed; } set { currentMaxSpeed = value; } }
+    public Movement4 MaxSpeed { get { return maxSpeed; }}
+    public Movement4 CurrentMaxSpeed { get { return currentMaxSpeed; } set { currentMaxSpeed = value; } }
 }

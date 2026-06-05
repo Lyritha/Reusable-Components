@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UIElements;
 
 [RequireComponent(typeof(Collider), typeof(Rigidbody))]
@@ -17,6 +18,7 @@ public class BreakableWallSegment : MonoBehaviour, IDamageable, IExplodeable
     [SerializeField]
     private List<BreakableWallSegment> neighborsIAmSupporting = new();
 
+    public UnityEvent OnBroken = new();
     public List<BreakableWallSegment> NeigborsSupportingMe => neighborsSupportingMe;
 
     // runtime data
@@ -33,6 +35,16 @@ public class BreakableWallSegment : MonoBehaviour, IDamageable, IExplodeable
         parentWall = GetComponentInParent<BreakableWall>();
         rb = GetComponent<Rigidbody>();
         rb.isKinematic = true;
+
+        if (TryGetComponent(out Countdown count))
+        {
+            OnBroken.AddListener(() => count.StartCountdown());
+
+            if (TryGetComponent(out DissolveDestroyObject dissolve))
+            {
+                count.OnCountdownEnded.AddListener(() => dissolve.TriggerDestroy());
+            }
+        }
     }
 
     public void TakeDamage(int amount, Vector3 hitPoint, Vector3 hitDirection) 
@@ -76,6 +88,8 @@ public class BreakableWallSegment : MonoBehaviour, IDamageable, IExplodeable
 
         gameObject.AddComponent<ShootablePhysicsObject>();
         if (applyExplosion) StartCoroutine(ApplyForceNextFrame(force, pos, radius));
+
+        OnBroken?.Invoke();
     }
 
     private IEnumerator ApplyForceNextFrame(float force, Vector3 pos, float radius)
@@ -201,9 +215,24 @@ public class BreakableWallSegment : MonoBehaviour, IDamageable, IExplodeable
             Transform t = transforms[i];
             if (t == null) throw new System.ArgumentException("transforms contains null entries");
 
-            if (invert) GizmoUtils.DrawDirectedLine(t.position, myPos, 0.05f);
-            else GizmoUtils.DrawDirectedLine(myPos, t.position, 0.05f);
+            if (invert) DrawDirectedLine(t.position, myPos, 0.05f);
+            else DrawDirectedLine(myPos, t.position, 0.05f);
         }
+    }
+
+    private void DrawDirectedLine(Vector3 start, Vector3 end, float arrowSize = 0.1f)
+    {
+        // draw line
+        Handles.DrawLine(start, end);
+
+        // draw arrow
+        Vector3 arrowPos = Vector3.Lerp(start, end, 0.5f);
+        Quaternion rot = Quaternion.LookRotation((end - start).normalized);
+        Handles.ConeHandleCap(0, arrowPos, rot, arrowSize, EventType.Repaint);
+
+        // draw points
+        Handles.SphereHandleCap(0, start, Quaternion.identity, 0.08f, EventType.Repaint);
+        Handles.SphereHandleCap(0, end, Quaternion.identity, 0.08f, EventType.Repaint);
     }
 #endif
 

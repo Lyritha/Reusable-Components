@@ -3,10 +3,26 @@ using UnityEngine;
 
 public class BridgeController : EntityController
 {
+    [Header("Parent Connection")]
+    [SerializeField, Tooltip("The ID of the parent controller to connect to, or -1 if you don't want to connect to a parent by default.")]
+    private int parentID = -1;
+
     private EntityController parent;
 
     // keep the subscription so we can unsubscribe later
     private Action _parentDestroyedHandler;
+
+    private void OnValidate()
+    {
+        makeInstance = false;
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        if (parentID != -1) ConnectToController(parentID);
+    }
 
     public void ConnectToController(int controllerId)
     {
@@ -18,19 +34,19 @@ public class BridgeController : EntityController
         parent = newController;
 
         // share the LayerItem instances intentionally
-        OnMove = parent.OnMove;
-        OnLookDelta = parent.OnLookDelta;
+        Move = parent.Move;
+        LookDelta = parent.LookDelta;
 
-        OnSprint = parent.OnSprint;
-        OnJump = parent.OnJump;
+        Sprint = parent.Sprint;
+        Jump = parent.Jump;
 
-        OnPrimaryMouse = parent.OnPrimaryMouse;
-        OnSecondaryMouse = parent.OnSecondaryMouse;
-        OnInteract = parent.OnInteract;
+        PrimaryMouse = parent.PrimaryMouse;
+        SecondaryMouse = parent.SecondaryMouse;
+        Interact = parent.Interact;
 
-        OnTab = parent.OnTab;
-        OnNumberSelected = parent.OnNumberSelected;
-        OnInventory = parent.OnInventory;
+        Tab = parent.Tab;
+        NumberSelected = parent.NumberSelected;
+        Inventory = parent.Inventory;
 
         // subscribe to parent's destroy so we can break the shared references
         _parentDestroyedHandler = () => DisconnectFromController();
@@ -47,20 +63,20 @@ public class BridgeController : EntityController
         }
 
         // break shared references by creating fresh LayerItems
-        OnMove = new LayerItem<Vector2>();
-        OnLookDelta = new LayerItem<Vector2>();
+        Move = new LayerItem<Vector2>();
+        LookDelta = new LayerItem<Vector2>();
 
-        OnSprint = new LayerItem<bool>();
-        OnJump = new LayerItem();
+        Sprint = new LayerItem<bool>();
+        Jump = new LayerItem();
 
-        OnPrimaryMouse = new LayerItem<bool> ();
-        OnSecondaryMouse = new LayerItem<bool> ();
-        OnInteract = new LayerItem ();
+        PrimaryMouse = new LayerItem<bool> ();
+        SecondaryMouse = new LayerItem<bool> ();
+        Interact = new LayerItem ();
 
-        OnTab = new LayerItem();
-        OnInventory = new LayerItem();
+        Tab = new LayerItem();
+        Inventory = new LayerItem();
 
-        OnNumberSelected = new LayerItem<int>();
+        NumberSelected = new LayerItem<int>();
 
         parent = null;
     }

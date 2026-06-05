@@ -11,7 +11,7 @@ public class GunAutomatic : Gun
 
     private void Awake()
     {
-        AddSubscription(e => e.OnPrimaryMouse.OnEvent += Use, e => e.OnPrimaryMouse.OnEvent -= Use);
+        AddSubscription(e => e.PrimaryMouse.OnEvent += Use, e => e.PrimaryMouse.OnEvent -= Use);
     }
 
     public void Use(bool Started) => isFiring = Started;

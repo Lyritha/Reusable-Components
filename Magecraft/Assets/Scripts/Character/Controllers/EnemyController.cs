@@ -33,8 +33,8 @@ public class EnemyController : EntityController
     {
         if (HasReachedPathEnd())
         {
-            OnLookDelta.Raise(Vector2.zero, ActiveLayer);
-            OnMove.Raise(Vector2.zero, ActiveLayer);
+            LookDelta.Raise(Vector2.zero, ActiveLayer);
+            Move.Raise(Vector2.zero, ActiveLayer);
             GetNewPosition();
         }
         else
@@ -81,7 +81,7 @@ public class EnemyController : EntityController
     {
         if (agent.pathPending)
         {
-            OnMove.Raise(Vector2.zero, ActiveLayer);
+            Move.Raise(Vector2.zero, ActiveLayer);
             return;
         }
 
@@ -90,14 +90,14 @@ public class EnemyController : EntityController
         Vector3 localDir = transform.InverseTransformDirection(worldDir);
         Vector2 moveDir = new(localDir.x, localDir.z);
 
-        OnMove.Raise(moveDir.normalized, ActiveLayer);
+        Move.Raise(moveDir.normalized, ActiveLayer);
     }
 
     private void HandleLook()
     {
         if (agent.pathPending)
         {
-            OnLookDelta.Raise(Vector2.zero, ActiveLayer);
+            LookDelta.Raise(Vector2.zero, ActiveLayer);
             return;
         }
 
@@ -109,7 +109,7 @@ public class EnemyController : EntityController
 
         float deltaYaw = Mathf.DeltaAngle(currentYaw, desiredYaw) * 0.25f;
 
-        OnLookDelta.Raise(new Vector2(deltaYaw, 0), ActiveLayer);
+        LookDelta.Raise(new Vector2(deltaYaw, 0), ActiveLayer);
     }
 
     private bool HasReachedPathEnd()
