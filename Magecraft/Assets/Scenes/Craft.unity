@@ -4129,14 +4129,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1691585652}
         m_TargetAssemblyTypeName: PotionDisplay, Assembly-CSharp
-        m_MethodName: ToggleShelfs
-        m_Mode: 1
+        m_MethodName: ShowPotions
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 50
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -6310,6 +6310,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 78d77ead96233c94a9a317cfc49e3a4c, type: 3}
   m_PrefabInstance: {fileID: 1690856899}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1691585652 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6542485961026026868, guid: adfd6c01bbe6ad94f9230352ab0bb2e2, type: 3}
+  m_PrefabInstance: {fileID: 1549541637093377748}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a6b21ee4b94ffd41936141edd1998cc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: '::'
 --- !u!1 &1723538220
 GameObject:
   m_ObjectHideFlags: 0

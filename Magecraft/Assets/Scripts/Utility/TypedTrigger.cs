@@ -1,48 +1,69 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Collider))]
-public abstract class TypedTrigger<T> : MonoBehaviour where T : MonoBehaviour
+public class TypedTrigger : TypedTrigger<IInteractable>
 {
-    [SerializeField]
-    private bool allowMultiple = true;
-    private T currentComponent;
+    protected override void OnTypeEnterTrigger(IInteractable instance) { }
+    protected override void OnTypeExitTrigger(IInteractable instance) { }
+}
 
-    /// <summary>
-    /// Triggers when a Monobehavior of <typeparamref name="T"/> Enters or exits the trigger
-    /// </summary>
+
+[RequireComponent(typeof(Collider))]
+public abstract class TypedTrigger<T> : MonoBehaviour
+{
+    [SerializeField] private bool allowMultiple = true;
+
+    private T singleInstance;
+    private HashSet<T> multiInstances = new();
+
     public Action<T, bool> OnTriggerChanged;
     public Action<T> OnTriggerEntered;
     public Action<T> OnTriggerExited;
 
     protected virtual void OnTriggerEnter(Collider other)
     {
-        // if only one T is allowed, return
-        if (!allowMultiple && currentComponent != null) return;
+        if (!other.TryGetComponent(out T instance)) return;
 
-        if (other.TryGetComponent(out T targetComp))
+        if (!allowMultiple)
         {
-            OnTriggerChanged?.Invoke(targetComp, true);
-            OnTriggerEntered?.Invoke(targetComp);
-            currentComponent = targetComp;
-
-            OnTypeEnterTrigger();
+            if (singleInstance != null) return;
+            singleInstance = instance;
         }
-    }
-    protected abstract void OnTypeEnterTrigger();
+        else if (!multiInstances.Add(instance)) return;
 
+
+        OnTriggerChanged?.Invoke(instance, true);
+        OnTriggerEntered?.Invoke(instance);
+
+        OnTypeEnterTrigger(instance);
+    }
 
     protected virtual void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent(out T targetComp) && targetComp == currentComponent)
-        {
-            OnTriggerChanged?.Invoke(targetComp, false);
-            OnTriggerExited?.Invoke(targetComp);
-            currentComponent = null;
+        if (!other.TryGetComponent(out T instance)) return;
 
-            OnTypeExitTrigger();
+        bool shouldFire = false;
+
+        if (!allowMultiple)
+        {
+            if (Equals(instance, singleInstance))
+            {
+                singleInstance = default;
+                shouldFire = true;
+            }
         }
+        else if (multiInstances.Remove(instance)) shouldFire = true;
+
+        if (!shouldFire) return;
+
+        OnTriggerChanged?.Invoke(instance, false);
+        OnTriggerExited?.Invoke(instance);
+
+        OnTypeExitTrigger(instance);
     }
-    protected abstract void OnTypeExitTrigger();
+
+    protected abstract void OnTypeEnterTrigger(T instance);
+    protected abstract void OnTypeExitTrigger(T instance);
 }
 

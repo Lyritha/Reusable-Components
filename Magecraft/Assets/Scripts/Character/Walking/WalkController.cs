@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public partial class WalkController : InputListener
+public class WalkController : InputListener
 {
     [SerializeField]
     protected Movement4 maxSpeed = Movement4.One;
