@@ -4271,6 +4271,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   makeInstance: 1
+  persistentInstance: 0
   forcedId: 0
   Id: 0
 --- !u!4 &1141938609

@@ -11,17 +11,21 @@ public abstract class IdentifiableBehaviour<T> : MonoBehaviour where T : Identif
     private static int pendingForcedCount = 0;
     private static bool forcedPhaseComplete = false;
 
-    [Header("Instance Management"), SerializeField, Tooltip("If not -1, force a specific ID for this (or the parent class) type")]
+    [Header("Instance Management"), SerializeField]
     protected bool makeInstance = true;
-    [SerializeField]
-    private int forcedId = -1;
-    [SerializeField, ShowOnly]
-    private int Id = 0;
+    [SerializeField, Tooltip("If true, this instance will persist across scene loads")]
+    protected bool persistentInstance = false;
+    [Header("id's"), SerializeField, Tooltip("If not -1, force a specific ID for this (or the parent class) type")]
+    protected int forcedId = -1;
+    [SerializeField, ShowOnly, Tooltip("The unique ID for this instance (Read-only)")]
+    protected int Id = 0;
 
-    public uint InstanceId { get; private set; } = uint.MaxValue;
+    public uint InstanceId { get; protected set; } = uint.MaxValue;
 
     protected virtual void Awake()
     {
+        if (persistentInstance) DontDestroyOnLoad(gameObject);
+
         if (!makeInstance)
         {
             forcedId = -1;

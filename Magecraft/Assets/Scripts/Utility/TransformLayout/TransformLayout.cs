@@ -23,8 +23,9 @@ public class TransformLayout : MonoBehaviour
 
     private void OnValidate() => ApplyLayout();
 
+#if UNITY_EDITOR 
     private void OnTransformChildrenChanged() => EditorApplication.delayCall += ApplyLayout;
-
+#endif
 
     public void ApplyLayout()
     {

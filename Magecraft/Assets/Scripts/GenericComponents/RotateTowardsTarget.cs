@@ -28,7 +28,7 @@ public class RotateTowardsTarget : MonoBehaviour
 
         if (lockToYRotation) targetPos.y = currentPos.y;
 
-        Vector3 dir = targetPos - currentPos;
+        Vector3 dir = currentPos - targetPos;
         if (dir.sqrMagnitude > 0.0001f) transform.rotation = Quaternion.LookRotation(dir.normalized);
     }
 }

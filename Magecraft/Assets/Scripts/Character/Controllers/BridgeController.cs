@@ -9,7 +9,6 @@ public class BridgeController : EntityController
 
     private EntityController parent;
 
-    // keep the subscription so we can unsubscribe later
     private Action _parentDestroyedHandler;
 
     private void OnValidate()
@@ -32,51 +31,53 @@ public class BridgeController : EntityController
         DisconnectFromController();
 
         parent = newController;
+        parentID = controllerId;
+        InstanceId = (uint)controllerId;
 
-        // share the LayerItem instances intentionally
-        Move = parent.Move;
-        LookDelta = parent.LookDelta;
+        // forward events instead of replacing LayerItems
+        Move.SetSource(parent.Move);
+        LookDelta.SetSource(parent.LookDelta);
 
-        Sprint = parent.Sprint;
-        Jump = parent.Jump;
+        Sprint.SetSource(parent.Sprint);
+        Jump.SetSource(parent.Jump);
 
-        PrimaryMouse = parent.PrimaryMouse;
-        SecondaryMouse = parent.SecondaryMouse;
-        Interact = parent.Interact;
+        PrimaryMouse.SetSource(parent.PrimaryMouse);
+        SecondaryMouse.SetSource(parent.SecondaryMouse);
+        Interact.SetSource(parent.Interact);
 
-        Tab = parent.Tab;
-        NumberSelected = parent.NumberSelected;
-        Inventory = parent.Inventory;
+        Tab.SetSource(parent.Tab);
+        NumberSelected.SetSource(parent.NumberSelected);
+        Inventory.SetSource(parent.Inventory);
 
-        // subscribe to parent's destroy so we can break the shared references
+        // auto-disconnect if parent is destroyed
         _parentDestroyedHandler = () => DisconnectFromController();
         parent.OnControllerDestroyed += _parentDestroyedHandler;
     }
 
     public void DisconnectFromController()
     {
-        // if we were subscribed to parent's destroy, remove it
+        parentID = -1;
+
         if (parent != null && _parentDestroyedHandler != null)
         {
             parent.OnControllerDestroyed -= _parentDestroyedHandler;
             _parentDestroyedHandler = null;
         }
 
-        // break shared references by creating fresh LayerItems
-        Move = new LayerItem<Vector2>();
-        LookDelta = new LayerItem<Vector2>();
+        // stop forwarding, but keep LayerItem instances alive
+        Move.SetSource(null);
+        LookDelta.SetSource(null);
 
-        Sprint = new LayerItem<bool>();
-        Jump = new LayerItem();
+        Sprint.SetSource(null);
+        Jump.SetSource(null);
 
-        PrimaryMouse = new LayerItem<bool> ();
-        SecondaryMouse = new LayerItem<bool> ();
-        Interact = new LayerItem ();
+        PrimaryMouse.SetSource(null);
+        SecondaryMouse.SetSource(null);
+        Interact.SetSource(null);
 
-        Tab = new LayerItem();
-        Inventory = new LayerItem();
-
-        NumberSelected = new LayerItem<int>();
+        Tab.SetSource(null);
+        NumberSelected.SetSource(null);
+        Inventory.SetSource(null);
 
         parent = null;
     }
@@ -87,3 +88,4 @@ public class BridgeController : EntityController
         base.OnDestroy();
     }
 }
+
