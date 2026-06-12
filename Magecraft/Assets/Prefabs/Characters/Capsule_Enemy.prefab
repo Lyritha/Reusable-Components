@@ -167,7 +167,7 @@ RectTransform:
   m_GameObject: {fileID: 3703909122537573586}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: -0.01, y: 0.01, z: 0.01}
+  m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2207917463740481098}
@@ -399,6 +399,7 @@ GameObject:
   - component: {fileID: 6469254661137335261}
   - component: {fileID: 858207752904834494}
   - component: {fileID: 4266381449580389851}
+  - component: {fileID: 5484191636593593560}
   m_Layer: 0
   m_Name: Capsule_Enemy
   m_TagString: Untagged
@@ -516,9 +517,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EnemyInput
   makeInstance: 1
+  persistentInstance: 0
   forcedId: -1
   Id: 0
-  ActiveLayer: 0
 --- !u!114 &127030566594708644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -581,6 +582,18 @@ MonoBehaviour:
   OnDepleted:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 5484191636593593560}
+        m_TargetAssemblyTypeName: EnemyLink, Assembly-CSharp
+        m_MethodName: Notify
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1692921820988570760}
         m_TargetAssemblyTypeName: DissolveDestroyObject, Assembly-CSharp
         m_MethodName: TriggerDestroy
@@ -621,7 +634,6 @@ MonoBehaviour:
   entity: {fileID: 0}
   yawSensitivity: 0.5
   pitchSensitivity: 0.5
-  pitchLimits: {x: -60, y: 40}
 --- !u!54 &858207752904834494
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -671,6 +683,18 @@ NavMeshAgent:
   m_BaseOffset: 1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
+--- !u!114 &5484191636593593560
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8405295724060196731}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6dd9d9f4f0a097b459c77d9cfd52a614, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::EnemyLink
 --- !u!1001 &2289104129671170181
 PrefabInstance:
   m_ObjectHideFlags: 0

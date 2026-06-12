@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-public abstract class EntityController : IdentifiableBehaviour<EntityController>
+public abstract class EntityController : SingletonGroup<EntityController>
 {
     public event Action OnControllerDestroyed;
 

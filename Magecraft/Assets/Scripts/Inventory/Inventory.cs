@@ -1,7 +1,7 @@
 using System.Linq;
 using UnityEngine;
 
-public class Inventory : IdentifiableBehaviour<Inventory>
+public class Inventory : SingletonGroup<Inventory>
 {
     private ItemPouch<ScriptableItem> inventoryPouch = new();
 
