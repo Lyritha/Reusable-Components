@@ -29,12 +29,12 @@ public class Pickupable : InputListener
         uint id = entity.InstanceId;
 
         Debug.Log($"finding inventory with id: {id}");
-        if (Inventory.TryGet(id, out Inventory inventory))
+        if (Inventory.Instance != null)
         {
             Debug.Log("found inventory");
 
             hasBeenPickedUp = true;
-            inventory.InventoryPouch.AddItems(item, amount);
+            Inventory.Instance.InventoryPouch.AddItems(item, amount);
             OnPickup?.Invoke();
         }
     }

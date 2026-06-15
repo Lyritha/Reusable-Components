@@ -700,7 +700,7 @@ MonoBehaviour:
   TiltAxis:
     Value: 0
     Center: 0
-    Range: {x: -60, y: 50}
+    Range: {x: -85, y: 85}
     Wrap: 0
     Recentering:
       Enabled: 0
@@ -769,8 +769,8 @@ MonoBehaviour:
       Enabled: 1
       Input:
         InputAction: {fileID: -5630151704836100654, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-        Gain: 50
-        CancelDeltaTime: 0
+        Gain: 1
+        CancelDeltaTime: 1
       InputValue: 0
       Driver:
         AccelTime: 0.2
@@ -780,8 +780,8 @@ MonoBehaviour:
       Enabled: 1
       Input:
         InputAction: {fileID: -5630151704836100654, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-        Gain: -50
-        CancelDeltaTime: 0
+        Gain: -1
+        CancelDeltaTime: 1
       InputValue: 0
       Driver:
         AccelTime: 0.2
@@ -894,7 +894,7 @@ MonoBehaviour:
   TiltAxis:
     Value: 0
     Center: 0
-    Range: {x: -60, y: 50}
+    Range: {x: -85, y: 85}
     Wrap: 0
     Recentering:
       Enabled: 0
@@ -963,8 +963,8 @@ MonoBehaviour:
       Enabled: 1
       Input:
         InputAction: {fileID: -5630151704836100654, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-        Gain: 50
-        CancelDeltaTime: 0
+        Gain: 1
+        CancelDeltaTime: 1
       InputValue: 0
       Driver:
         AccelTime: 0.2
@@ -974,8 +974,8 @@ MonoBehaviour:
       Enabled: 1
       Input:
         InputAction: {fileID: -5630151704836100654, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-        Gain: -50
-        CancelDeltaTime: 0
+        Gain: -1
+        CancelDeltaTime: 1
       InputValue: 0
       Driver:
         AccelTime: 0.2
@@ -1047,6 +1047,7 @@ GameObject:
   - component: {fileID: 5879455537952223236}
   - component: {fileID: 1750332518955446462}
   - component: {fileID: 7049554734281676108}
+  - component: {fileID: 8112794269772600068}
   - component: {fileID: 5719639285464878529}
   - component: {fileID: 3372497045807479532}
   - component: {fileID: 560900803574153556}
@@ -1090,6 +1091,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerController
   makeInstance: 1
+  persistentInstance: 0
   forcedId: 0
   Id: 0
 --- !u!114 &3949551433306806713
@@ -1106,10 +1108,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AnimatedWalkController
   entity: {fileID: 0}
   maxSpeed:
-    forward: 2
-    backward: 1.5
-    left: 1.5
-    right: 1.5
+    forward: 3
+    backward: 2
+    left: 2
+    right: 2
   acceleration: 5
   currentMaxSpeed:
     forward: 0
@@ -1189,7 +1191,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   entity: {fileID: 0}
-  maxDistance: 4
+  maxDistance: 2
+--- !u!114 &8112794269772600068
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7020241106117507846}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b563f69038e6547b98870753c66023, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthSystem
+  maxValue: 100
+  currentValue: 0
+  OnRestored:
+    m_PersistentCalls:
+      m_Calls: []
+  OnReduced:
+    m_PersistentCalls:
+      m_Calls: []
+  OnValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDepleted:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!33 &5719639285464878529
 MeshFilter:
   m_ObjectHideFlags: 0

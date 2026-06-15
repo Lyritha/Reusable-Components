@@ -1,9 +1,12 @@
+using System;
 using UnityEngine;
-using UnityEngine.Events;
+using Random = UnityEngine.Random;
 
 public class EnemyManager : Singleton<EnemyManager>
 {
-    public UnityEvent OnAllEnemiesDefeated;
+    // Static hooks
+    public static event Action OnAllEnemiesDefeated;
+    public static event Action<int> OnEnemyCountChanged;
 
     private EnemySpawner[] spawners;
 
@@ -24,6 +27,7 @@ public class EnemyManager : Singleton<EnemyManager>
             spawnedEnemies += randomEnemyCount;
 
             spawner.Spawn(randomEnemyCount);
+            OnEnemyCountChanged?.Invoke(spawnedEnemies);
         }
     }
 
@@ -31,11 +35,9 @@ public class EnemyManager : Singleton<EnemyManager>
     {
         spawnedEnemies -= 1;
 
-        if (spawnedEnemies <= 0)
-        {
-            OnAllEnemiesDefeated?.Invoke();
-
-            Debug.Log("won  ");
-        }
+        OnEnemyCountChanged?.Invoke(spawnedEnemies);
+        if (spawnedEnemies <= 0) OnAllEnemiesDefeated?.Invoke();
     }
+
+    public int EnemyCount => spawnedEnemies;
 }

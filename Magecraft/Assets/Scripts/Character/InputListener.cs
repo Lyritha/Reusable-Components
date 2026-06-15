@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Lyrith.Utility.Fold;
 
 /// <summary>
 /// Base class for components that subscribe to events on an EntityController.
@@ -12,6 +13,7 @@ using UnityEngine;
 /// <item>Handles late subscriptions safely</item>
 /// </list>
 /// </summary>
+[Fold]
 public abstract class InputListener : MonoBehaviour
 {
     [SerializeField, ShowOnly]

@@ -1,11 +1,13 @@
 using UnityEngine;
+using Lyrith.Utility.Fold;
 
+[RequireComponent(typeof(Rigidbody)), Fold]
 public class WalkController : InputListener
 {
     [SerializeField]
-    protected Movement4 maxSpeed = Movement4.One;
-    [SerializeField]
     protected float acceleration = 5;
+    [SerializeField]
+    protected Movement4 maxSpeed = Movement4.One;
 
     protected Vector2 dir = Vector2.zero;
     protected Vector2 localVelocity = Vector2.zero;
@@ -14,8 +16,12 @@ public class WalkController : InputListener
     [SerializeField, ShowOnly]
     protected Movement4 currentMaxSpeed;
 
+    [SerializeField]
+    private Vector2 automaticGay;
 
-    protected  void Awake()
+
+
+    protected void Awake()
     {
         rb = GetComponent<Rigidbody>();
         currentMaxSpeed = maxSpeed;
@@ -56,6 +62,6 @@ public class WalkController : InputListener
         return Vector2.MoveTowards(currentVel, targetVel, accel * Time.fixedDeltaTime);
     }
 
-    public Movement4 MaxSpeed { get { return maxSpeed; }}
+    public Movement4 MaxSpeed { get { return maxSpeed; } }
     public Movement4 CurrentMaxSpeed { get { return currentMaxSpeed; } set { currentMaxSpeed = value; } }
 }

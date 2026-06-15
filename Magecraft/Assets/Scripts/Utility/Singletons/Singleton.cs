@@ -1,3 +1,4 @@
+using Lyrith.Utility.Fold;
 using UnityEngine;
 
 [Fold]

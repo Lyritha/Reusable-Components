@@ -1,3 +1,4 @@
+using Lyrith.Utility.Fold;
 using System.Collections;
 using UnityEngine;
 
@@ -82,5 +83,21 @@ public class EnemySpawner : SingletonGroup<EnemySpawner>
         if (Physics.Raycast(rayStart, rayDir, out RaycastHit hit, col.size.y * 2f)) return hit.point;
 
         return pos;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.matrix = transform.localToWorldMatrix;
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireCube(Vector3.zero, col.size);
+        Gizmos.color = Color.clear;
+        Gizmos.DrawCube(Vector3.zero, col.size);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.matrix = transform.localToWorldMatrix;
+        Gizmos.color = Color.red;
+        Gizmos.DrawCube(Vector3.zero, col.size);
     }
 }

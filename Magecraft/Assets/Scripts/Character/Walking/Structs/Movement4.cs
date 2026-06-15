@@ -1,6 +1,7 @@
+using Lyrith.Utility.Fold;
 using System;
 
-[Serializable]
+[Serializable, Fold]
 public struct Movement4
 {
     public float forward;
