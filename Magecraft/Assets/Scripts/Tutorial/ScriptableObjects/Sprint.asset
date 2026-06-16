@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 37d3b84595efcb34294877e014307b12, type: 3}
-  m_Name: Walk
+  m_Name: Sprint
   m_EditorClassIdentifier: Assembly-CSharp::TutorialStep
-  requiredPress: {fileID: -1680190386980627800, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
-  prompt: Use <Input> to walk around.
+  input: {fileID: -7471211009204490832, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
+  prompt: Press <Input> to run when walking.

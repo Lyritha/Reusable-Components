@@ -1,23 +1,51 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputDeviceTracker : Singleton<InputDeviceTracker>
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
+public static class InputDeviceTracker
 {
     public static InputDevice LastUsedDevice { get; private set; }
     public static Action OnInputSourceChanged;
 
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void Initialize()
+    {
+        InputSystem.onActionChange -= OnActionChange; // prevent double-register
+        InputSystem.onActionChange += OnActionChange;
 
-    private void OnEnable() => InputSystem.onActionChange += OnActionChange;
-    private void OnDisable() => InputSystem.onActionChange -= OnActionChange;
+#if UNITY_EDITOR
+        EditorApplication.playModeStateChanged -= OnPlayModeChanged;
+        EditorApplication.playModeStateChanged += OnPlayModeChanged;
+#endif
+    }
 
+#if UNITY_EDITOR
+    private static void OnPlayModeChanged(PlayModeStateChange state)
+    {
+        if (state == PlayModeStateChange.ExitingPlayMode)
+        {
+            InputSystem.onActionChange -= OnActionChange;
+            LastUsedDevice = null;
+            OnInputSourceChanged = null;
+        }
+    }
+#endif
 
-    private void OnActionChange(object obj, InputActionChange change)
+    private static void OnActionChange(object obj, InputActionChange change)
     {
         if (change != InputActionChange.ActionPerformed) return;
         if (obj is InputAction action)
         {
-            LastUsedDevice = action.activeControl?.device;
+            var device = action.activeControl?.device;
+            if (device == null || device == LastUsedDevice) return;
+
+            LastUsedDevice = device;
             OnInputSourceChanged?.Invoke();
         }
     }
@@ -29,7 +57,7 @@ public class InputDeviceTracker : Singleton<InputDeviceTracker>
 
         for (int i = 0; i < bindings.Count; i++)
         {
-            var binding = bindings[i];
+            InputBinding binding = bindings[i];
 
             if (binding.isComposite)
             {
@@ -38,16 +66,12 @@ public class InputDeviceTracker : Singleton<InputDeviceTracker>
                 bool isGamepadComposite = IsGamepadPath(bindings[i + 1].effectivePath);
                 if (isGamepad != isGamepadComposite) continue;
 
-                // Return each child as a separate entry
                 var parts = new List<(string name, string path)>();
                 int j = i + 1;
                 while (j < bindings.Count && bindings[j].isPartOfComposite)
                 {
                     parts.Add((
-                        name: InputControlPath.ToHumanReadableString(
-                            bindings[j].effectivePath,
-                            InputControlPath.HumanReadableStringOptions.OmitDevice
-                        ),
+                        name: InputControlPath.ToHumanReadableString( bindings[j].effectivePath, InputControlPath.HumanReadableStringOptions.OmitDevice),
                         path: bindings[j].effectivePath
                     ));
                     j++;
@@ -60,24 +84,18 @@ public class InputDeviceTracker : Singleton<InputDeviceTracker>
             if (isGamepad == IsGamepadPath(binding.effectivePath))
             {
                 return new List<(string name, string path)>
-            {
-                (
-                    name: InputControlPath.ToHumanReadableString(
-                        binding.effectivePath,
-                        InputControlPath.HumanReadableStringOptions.OmitDevice
-                    ),
-                    path: binding.effectivePath
-                )
-            };
+                {
+                    (
+                        name: InputControlPath.ToHumanReadableString(binding.effectivePath, InputControlPath.HumanReadableStringOptions.OmitDevice),
+                        path: binding.effectivePath
+                    )
+                };
             }
         }
-
-        // Fallback
         return new List<(string name, string path)>
     {
         (
-            name: InputControlPath.ToHumanReadableString(
-                action.bindings[0].effectivePath,
+            name: InputControlPath.ToHumanReadableString( action.bindings[0].effectivePath,
                 InputControlPath.HumanReadableStringOptions.OmitDevice
             ),
             path: action.bindings[0].effectivePath
@@ -127,10 +145,8 @@ public class InputDeviceTracker : Singleton<InputDeviceTracker>
         return result;
     }
 
-    public static bool IsGamepadPath(string path)
-    {
-        return path.StartsWith("<Gamepad>")
-               || path.StartsWith("<DualShock>")
-               || path.StartsWith("<XInputController>");
-    }
+    public static bool IsGamepadPath(string path) =>
+        path.StartsWith("<Gamepad>") ||
+        path.StartsWith("<DualShock>") ||
+        path.StartsWith("<XInputController>");
 }

@@ -4251,6 +4251,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1141938609}
   - component: {fileID: 1141938608}
+  - component: {fileID: 1141938610}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -4289,6 +4290,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1141938610
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1141938607}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01127d44caf102842a2674bb55eb0db9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Grabber
+  entity: {fileID: 0}
+  grabRange: 3
+  grabMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!4 &1160108630 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7290510035459509816, guid: 9fa63da0f5e10c942815e28d758abb36, type: 3}

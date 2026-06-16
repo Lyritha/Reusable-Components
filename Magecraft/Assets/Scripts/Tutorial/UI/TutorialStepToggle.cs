@@ -10,14 +10,14 @@ public class TutorialStepToggle : MonoBehaviour
     [SerializeField]
     private Toggle toggle;
 
-    public void Intialize(InputAction input, bool completed)
+    public void Intialize(string title, bool completed)
     {
-        toggleText.text = input.name;
+        toggleText.text = title;
         toggle.isOn = completed;
     }
 
     public void Complete()
     {
-        toggle.isOn = false;
+        toggle.isOn = true;
     }
 }

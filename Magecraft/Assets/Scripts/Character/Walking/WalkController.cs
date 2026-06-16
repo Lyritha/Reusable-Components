@@ -29,7 +29,7 @@ public class WalkController : InputListener
 
     private void OnMove(Vector2 vector)
     {
-        dir = vector;
+        dir = vector.normalized;
     }
 
     protected virtual void FixedUpdate()

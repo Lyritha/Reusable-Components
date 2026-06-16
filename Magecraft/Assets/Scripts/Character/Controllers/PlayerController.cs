@@ -23,6 +23,7 @@ public class PlayerController : EntityController
         Bind(actions.Player.Sprint, OnSprintInput);
         Bind(actions.Player.Attack, OnAttackInput);
         Bind(actions.Player.SecondaryAttack, OnSecondaryAttackInput);
+        Bind(actions.Player.Scroll, OnScroll);
 
         actions.Player.Interact.performed += OnInteractInput;
         actions.Player.Tab.performed += OnTabInput;
@@ -38,6 +39,7 @@ public class PlayerController : EntityController
         Unbind(actions.Player.Sprint, OnSprintInput);
         Unbind(actions.Player.Attack, OnAttackInput);
         Unbind(actions.Player.SecondaryAttack, OnSecondaryAttackInput);
+        Unbind(actions.Player.Scroll, OnScroll);
 
         actions.Player.Interact.performed -= OnInteractInput;
         actions.Player.Tab.performed -= OnTabInput;
@@ -72,6 +74,7 @@ public class PlayerController : EntityController
     private void OnInventoryInput(CallbackContext ctx) => Inventory.Raise(ActiveLayer);
     private void OnTabInput(CallbackContext ctx) => Tab.Raise(ActiveLayer);
     private void OnNumberSelectedInput(CallbackContext ctx) => NumberSelected.Raise(GetNumber(ctx), ActiveLayer);
+    private void OnScroll(CallbackContext ctx) => Scroll.Raise((int)GetFloat(ctx), ActiveLayer);
 
 
     // utility functions to convert input values to the appropriate types for events

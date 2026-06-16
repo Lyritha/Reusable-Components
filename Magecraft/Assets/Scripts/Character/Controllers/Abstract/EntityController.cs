@@ -21,6 +21,7 @@ public abstract class EntityController : SingletonGroup<EntityController>
     public LayerItem<bool> SecondaryMouse = new() { layers = {Layer.Movement, Layer.UI } };
 
     public LayerItem<int> NumberSelected = new() { layers = { Layer.Movement } };
+    public LayerItem<int> Scroll = new() { layers = { Layer.Movement } };
 
     public LayerItem Jump = new() { layers = {Layer.Movement } };
     public LayerItem Interact = new() { layers = {Layer.Movement } };
@@ -39,6 +40,7 @@ public abstract class EntityController : SingletonGroup<EntityController>
         SecondaryMouse.Raise(false, ActiveLayer);
 
         NumberSelected.Raise(0, ActiveLayer);
+        Scroll.Raise(0, ActiveLayer);
 
         ActiveLayer = layer;
     }

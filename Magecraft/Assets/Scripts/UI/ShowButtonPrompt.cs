@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 using TMPro;
+using System.Linq;
 
 public class ShowButtonPrompt : MonoBehaviour
 {
@@ -13,20 +14,14 @@ public class ShowButtonPrompt : MonoBehaviour
     private void OnEnable()
     {
         UpdatePrompt();
-        InputSystem.onActionChange += OnActionChange;
+        InputDeviceTracker.OnInputSourceChanged += UpdatePrompt;
     }
 
     private void OnDisable()
     {
-        InputSystem.onActionChange -= OnActionChange;
+        InputDeviceTracker.OnInputSourceChanged -= UpdatePrompt;
     }
 
-    private void OnActionChange(object obj, InputActionChange change)
-    {
-        // Only update when this specific action changes
-        if (obj == action.action)
-            UpdatePrompt();
-    }
 
     private void UpdatePrompt()
     {
@@ -34,8 +29,10 @@ public class ShowButtonPrompt : MonoBehaviour
             return;
 
         // This automatically respects runtime overrides, rebinding, device changes, etc.
-        string display = action.action.GetBindingDisplayString();
+        string bindingDisplay = string.Join(", ", InputDeviceTracker
+            .GetBindingsForLastDevice(action)
+            .Select(b => InputNames.GetCleanBindingName(b.path, b.name)));
 
-        text.text = display;
+        text.text = bindingDisplay;
     }
 }
