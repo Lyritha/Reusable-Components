@@ -33,7 +33,7 @@ namespace Lyrith.Utility.Fold.EditorTools
                         {
                             ClassName = type.Name,
                             SectionName = type.Name,
-                            IsFlat = true
+                            SectionType = SectionType.Flat
                         };
 
                         int order = 0;
@@ -60,7 +60,8 @@ namespace Lyrith.Utility.Fold.EditorTools
             section = new FoldSection
             {
                 ClassName = type.Name,
-                SectionName = !string.IsNullOrEmpty(foldAttr?.Name) ? foldAttr.Name : $"{GetPrettyName(type.Name)} Settings"
+                SectionName = !string.IsNullOrEmpty(foldAttr?.Name) ? foldAttr.Name : $"{GetPrettyName(type.Name)} Settings",
+                HideFoldout = foldAttr.Hide
             };
 
             FoldSection currentSubSection = null;
@@ -77,7 +78,8 @@ namespace Lyrith.Utility.Fold.EditorTools
                     {
                         ClassName = field.Name,
                         SectionName = !string.IsNullOrEmpty(startFold.Name) ? startFold.Name : ObjectNames.NicifyVariableName(field.Name),
-                        orderPos = order++
+                        orderPos = order++,
+                        HideFoldout = startFold.Hide
                     };
                     section.SubSections.Add(currentSubSection);
                 }
@@ -89,19 +91,6 @@ namespace Lyrith.Utility.Fold.EditorTools
             }
 
             return section.Fields.Count > 0 || section.StructFields.Count > 0 || section.SubSections.Count > 0;
-        }
-
-        private static FoldSection CreateStructSection(FieldInfo field, int order)
-        {
-            FoldAttribute foldAttr = (FoldAttribute)Attribute.GetCustomAttribute(field.FieldType, typeof(FoldAttribute));
-            return new FoldSection
-            {
-                ClassName = field.FieldType.Name,
-                SectionName = !string.IsNullOrEmpty(foldAttr?.Name) ? foldAttr.Name : ObjectNames.NicifyVariableName(field.Name),
-                StructFields = { (field.Name, order) },
-                IsStructSection = true,
-                orderPos = order
-            };
         }
 
         // ─── Field Categorization ─────────────────────────────────────────────────

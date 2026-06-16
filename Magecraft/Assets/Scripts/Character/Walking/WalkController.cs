@@ -1,7 +1,7 @@
 using UnityEngine;
 using Lyrith.Utility.Fold;
 
-[RequireComponent(typeof(Rigidbody)), Fold]
+[RequireComponent(typeof(Rigidbody))]
 public class WalkController : InputListener
 {
     [SerializeField]
@@ -15,11 +15,6 @@ public class WalkController : InputListener
 
     [SerializeField, ShowOnly]
     protected Movement4 currentMaxSpeed;
-
-    [SerializeField]
-    private Vector2 automaticGay;
-
-
 
     protected void Awake()
     {

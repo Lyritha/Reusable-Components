@@ -6,7 +6,13 @@ namespace Lyrith.Utility.Fold
     public class FoldAttribute : Attribute
     {
         public string Name { get; }
+        public bool Hide { get; }
+
         public FoldAttribute() { }
-        public FoldAttribute(string name) { Name = name; }
+        public FoldAttribute(string name = null, bool hide = false)
+        {
+            Name = name;
+            Hide = hide;
+        }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
@@ -8,22 +9,26 @@ namespace Lyrith.Utility.Fold.EditorTools
     [CustomEditor(typeof(MonoBehaviour), true)]
     public class FoldInspector : Editor
     {
-        // ─── State ───────────────────────────────────────────────────────────────
-
+        private Dictionary<string, SerializedProperty> propertyCache;
         private List<FoldSection> foldSections;
         private GUIStyle boxStyle;
         private GUIStyle labelStyle;
 
-        // ─── Unity Callbacks ─────────────────────────────────────────────────────
-
-        private void OnEnable() => foldSections = FoldSectionCache.Build(target);
+        private void OnEnable()
+        {
+            foldSections = FoldSectionCache.Build(target);
+            propertyCache = new();
+        }
 
         public override void OnInspectorGUI()
         {
             InitStyles();
             serializedObject.Update();
 
-            DrawScriptField();
+            // draw script field
+            EditorGUI.BeginDisabledGroup(true);
+            EditorGUILayout.PropertyField(GetProp("m_Script"));
+            EditorGUI.EndDisabledGroup();
             EditorGUILayout.Space(6);
 
             foreach (FoldSection section in foldSections) DrawFoldSection(section);
@@ -31,43 +36,134 @@ namespace Lyrith.Utility.Fold.EditorTools
             DrawRemainingProperties();
             serializedObject.ApplyModifiedProperties();
         }
-
-        // ─── Section Drawing ──────────────────────────────────────────────────────
-
         private void DrawFoldSection(FoldSection section)
         {
-            if (section.IsFlat)
+            if (section.HideFoldout) return;
+
+            switch (section.SectionType)
             {
-                foreach (FoldOrderedItem item in GetOrderedItems(section)) DrawOrderedItem(item);
-                return;
+                case SectionType.Flat:
+                    foreach (FoldOrderedItem item in GetOrderedItems(section)) DrawOrderedItem(item, true);
+                    break;
+
+                case SectionType.Struct:
+                    foreach ((string name, int _) in section.StructFields) DrawStructBox(name, true);
+                    EditorGUILayout.Space(6);
+                    break;
+
+                case SectionType.Default:
+                default:
+                    DrawFoldoutBox(section, () =>
+                    { foreach (FoldOrderedItem item in GetOrderedItems(section)) DrawOrderedItem(item); });
+                    EditorGUILayout.Space(6);
+                    break;
             }
-
-            if (section.IsStructSection)
-            {
-                foreach ((string name, int _) in section.StructFields) DrawStructBox(name, true);
-                EditorGUILayout.Space(6);
-                return;
-            }
-
-            EditorGUILayout.BeginVertical(boxStyle);
-            EditorGUI.indentLevel++;
-            section.Foldout = EditorGUILayout.Foldout(section.Foldout, section.SectionName, true, labelStyle);
-
-            if (section.Foldout)
-            {
-                EditorGUILayout.Space(6);
-
-                foreach (FoldOrderedItem item in GetOrderedItems(section))
-                    DrawOrderedItem(item);
-            }
-
-            EditorGUI.indentLevel--;
-            EditorGUILayout.EndVertical();
-            EditorGUILayout.Space(6);
         }
 
 
+        private void DrawOrderedItem(FoldOrderedItem item, bool indent = false)
+        {
+            if (item.Section != null && item.Section.HideFoldout) return;
 
+            switch (item.Type)
+            {
+                case FoldItemType.Field: DrawProperty(item.Name); break;
+
+                case FoldItemType.Struct: DrawStructBox(item.Name, indent); break;
+
+                case FoldItemType.SubSection:
+                    DrawFoldoutBox(item.Section, () =>
+                    {
+                        foreach (FoldOrderedItem subItem in GetOrderedItems(item.Section)) DrawOrderedItem(subItem);
+                    });
+                    break;
+            }
+        }
+        private void DrawProperty(string name)
+        {
+            SerializedProperty prop = GetProp(name);
+            if (prop == null) return;
+
+            EditorGUILayout.PropertyField(prop, true);
+        }
+        private void DrawStructBox(string name, bool indent = false)
+        {
+            SerializedProperty prop = GetProp(name);
+            if (prop == null) return;
+
+            EditorGUILayout.Space(3);
+
+            DrawBox(() =>
+            {
+                EditorGUILayout.PropertyField(prop, true);
+            }, indent);
+
+            EditorGUILayout.Space(3);
+        }
+        private void DrawRemainingProperties()
+        {
+            HashSet<string> excluded = new() { "m_Script" };
+
+            foreach (FoldSection s in foldSections)
+            {
+                foreach ((string, int) f in s.Fields) excluded.Add(f.Item1);
+                foreach ((string, int) f in s.StructFields) excluded.Add(f.Item1);
+
+                foreach (FoldSection sub in s.SubSections)
+                {
+                    foreach ((string, int) f in sub.Fields) excluded.Add(f.Item1);
+                    foreach ((string, int) f in sub.StructFields) excluded.Add(f.Item1);
+                }
+            }
+
+            DrawPropertiesExcluding(serializedObject, excluded.ToArray());
+        }
+
+
+        // ui utils
+        private void DrawFoldoutBox(FoldSection section, Action contents)
+        {
+            DrawBox(() =>
+            {
+                section.Foldout = EditorGUILayout.Foldout(section.Foldout, section.SectionName, true, labelStyle);
+                if (section.Foldout)
+                {
+                    EditorGUILayout.Space(6);
+                    contents();
+                }
+            });
+        }
+        private void DrawBox(Action contents, bool indent = true)
+        {
+            try
+            {
+                EditorGUILayout.BeginVertical(boxStyle);
+                if (indent) EditorGUI.indentLevel++;
+                contents?.Invoke();
+            }
+            finally
+            {
+                if (indent) EditorGUI.indentLevel--;
+                EditorGUILayout.EndVertical();
+            }
+        }
+        private void InitStyles()
+        {
+            boxStyle ??= new GUIStyle(EditorStyles.helpBox) { padding = new RectOffset(10, 10, 10, 10) };
+            labelStyle ??= new GUIStyle(EditorStyles.foldout) { fontStyle = FontStyle.Bold };
+        }
+
+
+        // utils
+        private SerializedProperty GetProp(string name)
+        {
+            if (propertyCache.TryGetValue(name, out var prop) && prop != null) return prop;
+
+            prop = serializedObject.FindProperty(name);
+            if (prop != null) propertyCache[name] = prop;
+
+            return prop;
+        }
         private static IEnumerable<FoldOrderedItem> GetOrderedItems(FoldSection section)
         {
             IEnumerable<FoldOrderedItem> fields = section.Fields.Select(f => new FoldOrderedItem
@@ -80,81 +176,6 @@ namespace Lyrith.Utility.Fold.EditorTools
             { Order = s.orderPos, Type = FoldItemType.SubSection, Section = s });
 
             return fields.Concat(structs).Concat(subs).OrderBy(x => x.Order);
-        }
-
-        private void DrawOrderedItem(FoldOrderedItem item)
-        {
-            switch (item.Type)
-            {
-                case FoldItemType.Field: DrawProperty(item.Name); break;
-                case FoldItemType.Struct: DrawStructBox(item.Name); break;
-                case FoldItemType.SubSection: DrawSubSection(item.Section); break;
-            }
-        }
-
-        private void DrawScriptField()
-        {
-            EditorGUI.BeginDisabledGroup(true);
-            EditorGUILayout.PropertyField(serializedObject.FindProperty("m_Script"));
-            EditorGUI.EndDisabledGroup();
-        }
-        private void DrawProperty(string name)
-        {
-            SerializedProperty prop = serializedObject.FindProperty(name);
-            if (prop == null) return;
-
-            if (prop.propertyType == SerializedPropertyType.Generic && prop.hasVisibleChildren)
-            {
-                EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(prop, true);
-                EditorGUI.indentLevel--;
-            }
-            else EditorGUILayout.PropertyField(prop);
-        }
-        private void DrawStructBox(string name, bool indent = false)
-        {
-            SerializedProperty prop = serializedObject.FindProperty(name);
-            if (prop == null) return;
-
-            EditorGUILayout.Space(3);
-
-            EditorGUILayout.BeginVertical(boxStyle);
-            if (indent) EditorGUI.indentLevel++;
-            EditorGUILayout.PropertyField(prop, true);
-            if (indent) EditorGUI.indentLevel--;
-            EditorGUILayout.EndVertical();
-
-            EditorGUILayout.Space(3);
-        }
-
-        private void DrawSubSection(FoldSection section)
-        {
-            EditorGUILayout.BeginVertical(boxStyle);
-            EditorGUI.indentLevel++;
-            section.Foldout = EditorGUILayout.Foldout(section.Foldout, section.SectionName, true, labelStyle);
-
-            if (section.Foldout) foreach (FoldOrderedItem item in GetOrderedItems(section)) DrawOrderedItem(item);
-
-            EditorGUI.indentLevel--;
-            EditorGUILayout.EndVertical();
-        }
-
-        private void DrawRemainingProperties()
-        {
-            List<string> excluded = new() { "m_Script" };
-            excluded.AddRange(foldSections.SelectMany(s => s.Fields.Select(f => f.Item1)));
-            excluded.AddRange(foldSections.SelectMany(s => s.StructFields.Select(f => f.Item1)));
-            excluded.AddRange(foldSections.SelectMany(s => s.SubSections.SelectMany(sub => sub.Fields.Select(f => f.Item1))));
-            excluded.AddRange(foldSections.SelectMany(s => s.SubSections.SelectMany(sub => sub.StructFields.Select(f => f.Item1))));
-            DrawPropertiesExcluding(serializedObject, excluded.ToArray());
-        }
-        private void InitStyles()
-        {
-            boxStyle ??= new GUIStyle(EditorStyles.helpBox) { padding = new RectOffset(10, 10, 10, 10) };
-            labelStyle ??= new GUIStyle(EditorStyles.foldout)
-            {
-                fontStyle = FontStyle.Bold
-            };
         }
     }
 }

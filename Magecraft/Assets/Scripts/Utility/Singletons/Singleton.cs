@@ -1,7 +1,7 @@
 using Lyrith.Utility.Fold;
 using UnityEngine;
 
-[Fold]
+[Fold("Singleton")]
 public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     [SerializeField, Tooltip("If true, this instance will persist across scene loads")]

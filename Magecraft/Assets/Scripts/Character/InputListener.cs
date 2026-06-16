@@ -13,7 +13,7 @@ using Lyrith.Utility.Fold;
 /// <item>Handles late subscriptions safely</item>
 /// </list>
 /// </summary>
-[Fold]
+[Fold("Input source")]
 public abstract class InputListener : MonoBehaviour
 {
     [SerializeField, ShowOnly]

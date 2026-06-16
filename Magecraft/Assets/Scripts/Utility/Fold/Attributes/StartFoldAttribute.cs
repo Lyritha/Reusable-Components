@@ -6,9 +6,12 @@ namespace Lyrith.Utility.Fold
     public class StartFoldAttribute : Attribute
     {
         public string Name { get; }
-        public StartFoldAttribute(string name = null)
+        public bool Hide { get; }
+
+        public StartFoldAttribute(string name = null, bool hide = false)
         {
             Name = name;
+            Hide = hide;
         }
     }
 }
