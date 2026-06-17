@@ -15,7 +15,7 @@ public class TransformLayout : MonoBehaviour
     private bool dynamicSpacing = false;
 
     [SerializeField]
-    private Vector3 boundsSize = new(5f, 5f, 0f);
+    private Vector3 boundsSize = new(5f, 5f, 5f);
     [SerializeField]
     private Vector3 boundsOffset = new(0f, 0f, 0f);
 

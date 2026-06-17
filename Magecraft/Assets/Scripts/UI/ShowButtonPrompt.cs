@@ -22,17 +22,9 @@ public class ShowButtonPrompt : MonoBehaviour
         InputDeviceTracker.OnInputSourceChanged -= UpdatePrompt;
     }
 
-
     private void UpdatePrompt()
     {
-        if (action == null || action.action == null)
-            return;
-
-        // This automatically respects runtime overrides, rebinding, device changes, etc.
-        string bindingDisplay = string.Join(", ", InputDeviceTracker
-            .GetBindingsForLastDevice(action)
-            .Select(b => InputNames.GetCleanBindingName(b.path, b.name)));
-
-        text.text = bindingDisplay;
+        if (action == null || action.action == null) return;
+        text.text = string.Join(", ", InputDeviceTracker.GetBindingsForLastDevice(action, true));
     }
 }

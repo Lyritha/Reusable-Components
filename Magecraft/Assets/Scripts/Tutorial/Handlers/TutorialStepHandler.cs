@@ -46,7 +46,7 @@ public class TutorialStepHandler
             InputAction action = new(name: name, binding: path);
             action.performed += _ => OnActionPerformed(action);
             action.Enable();
-            allActions[action] = new(false, InputNames.GetCleanBindingName(path, name));
+            allActions[action] = new(false, InputDeviceTracker.GetSanitizedBindingName(path, name));
         }
     }
 
@@ -83,10 +83,7 @@ public class TutorialStepHandler
 
     private string GetPrompt()
     {
-        string bindingDisplay = string.Join(", ", InputDeviceTracker
-            .GetBindingsForLastDevice(currentStep.input.action)
-            .Select(b => InputNames.GetCleanBindingName(b.path, b.name)));
-
+        string bindingDisplay = string.Join(", ", InputDeviceTracker.GetBindingsForLastDevice(currentStep.input.action, true));
         return currentStep.prompt.Replace("<Input>", bindingDisplay);
     }
 
