@@ -32,7 +32,7 @@ public class Look : InputListener
         base.Update();
 
         // wrap by default, clamp in derived classes if needed
-        Yaw += lookInput.x * yawSensitivity;
+        Yaw += lookInput.x * yawSensitivity * Time.deltaTime;
         Yaw = WrapAngle(Yaw);
 
         Pitch -= lookInput.y * pitchSensitivity;
