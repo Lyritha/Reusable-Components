@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class TutorialStepHandler
@@ -46,7 +47,7 @@ public class TutorialStepHandler
             InputAction action = new(name: name, binding: path);
             action.performed += _ => OnActionPerformed(action);
             action.Enable();
-            allActions[action] = new(false, InputDeviceTracker.GetSanitizedBindingName(path, name));
+            allActions[action] = new(false, InputDeviceTracker.Sanitize(path, name));
         }
     }
 
@@ -54,10 +55,7 @@ public class TutorialStepHandler
     {
         currentDeviceActions.Clear();
 
-        var activeBindings = InputDeviceTracker
-            .GetBindingsForLastDevice(currentStep.input.action)
-            .Select(b => b.path)
-            .ToHashSet();
+        HashSet<string> activeBindings = InputDeviceTracker.GetBindingsLastDevice(currentStep.input.action).Select(b => b.path).ToHashSet();
 
         foreach (var (action, completed) in allActions)
             if (activeBindings.Contains(action.bindings[0].effectivePath))
@@ -83,20 +81,54 @@ public class TutorialStepHandler
 
     private string GetPrompt()
     {
-        string bindingDisplay = string.Join(", ", InputDeviceTracker.GetBindingsForLastDevice(currentStep.input.action, true));
-        return currentStep.prompt.Replace("<Input>", bindingDisplay);
+        List<string> inputs = InputDeviceTracker.GetNamesLastDevice(currentStep.input.action, true);
+
+        var (commonPrefix, strippedInputs) = ExtractCommonPrefix(inputs);
+        bool hasCommonPrefix = !string.IsNullOrEmpty(commonPrefix) && strippedInputs.All(s => s.Length > 0);
+
+        if (hasCommonPrefix) inputs = strippedInputs;
+
+        string prompt;
+        if (inputs.Count == 1) prompt = inputs[0];
+        else if (hasCommonPrefix) prompt = $"{commonPrefix} {string.Join("/", inputs)}";
+        else prompt = string.Join(inputs.Count == 2 ? " and " : ",", inputs);
+
+        return currentStep.prompt.Replace("<Input>", $"\"{prompt}\"");
+    }
+
+    private (string prefix, List<string> names) ExtractCommonPrefix(List<string> names)
+    {
+        if (names.Count < 2) return ("", names);
+
+        string prefix = names[0];
+        foreach (string name in names)
+        {
+            int matchLength = 0;
+            int maxLength = Mathf.Min(prefix.Length, name.Length);
+            while (matchLength < maxLength && prefix[matchLength] == name[matchLength]) matchLength++;
+            prefix = prefix[..matchLength];
+            if (prefix.Length == 0) break;
+        }
+
+        int lastSpace = prefix.LastIndexOf(' ');
+        prefix = lastSpace >= 0 ? prefix[..(lastSpace + 1)] : "";
+
+        if (string.IsNullOrEmpty(prefix)) return ("", names);
+
+        var stripped = names.Select(n => n[prefix.Length..]).ToList();
+        return (prefix.TrimEnd(), stripped);
     }
 
     public void Cleanup()
+{
+    foreach (InputAction action in allActions.Keys)
     {
-        foreach (InputAction action in allActions.Keys)
-        {
-            action.Disable();
-            action.Dispose();
-        }
-
-        allActions.Clear();
-        currentDeviceActions.Clear();
-        currentStep = null;
+        action.Disable();
+        action.Dispose();
     }
+
+    allActions.Clear();
+    currentDeviceActions.Clear();
+    currentStep = null;
+}
 }

@@ -25,6 +25,6 @@ public class ShowButtonPrompt : MonoBehaviour
     private void UpdatePrompt()
     {
         if (action == null || action.action == null) return;
-        text.text = string.Join(", ", InputDeviceTracker.GetBindingsForLastDevice(action, true));
+        text.text = string.Join(", ", InputDeviceTracker.GetNamesLastDevice(action, true));
     }
 }
