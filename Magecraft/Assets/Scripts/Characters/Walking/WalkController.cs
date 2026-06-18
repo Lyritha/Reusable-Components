@@ -7,6 +7,8 @@ public class WalkController : InputListener
     [SerializeField]
     protected float acceleration = 5;
     [SerializeField]
+    protected float decceleration = 15;
+    [SerializeField]
     protected Movement4 maxSpeed = Movement4.One;
 
     protected Vector2 dir = Vector2.zero;
@@ -34,7 +36,7 @@ public class WalkController : InputListener
 
     protected virtual void FixedUpdate()
     {
-        localVelocity = GetLocalVelocity(localVelocity, dir, currentMaxSpeed, acceleration);
+        localVelocity = GetLocalVelocity(localVelocity, dir, currentMaxSpeed, acceleration, decceleration);
 
         if (rb != null)
         {
@@ -44,7 +46,7 @@ public class WalkController : InputListener
         }
     }
 
-    protected Vector2 GetLocalVelocity(Vector2 currentVel, Vector2 input, Movement4 speedMod, float accel)
+    protected Vector2 GetLocalVelocity(Vector2 currentVel, Vector2 input, Movement4 speedMod, float accel, float decell)
     {
 
         Vector2 targetVel = Vector2.zero;
@@ -54,6 +56,7 @@ public class WalkController : InputListener
             targetVel.y = input.y > 0 ? input.y * speedMod.forward : input.y * speedMod.backward;
         }
 
+        float speed = targetVel.magnitude > currentVel.magnitude ? accel : decell; 
         return Vector2.MoveTowards(currentVel, targetVel, accel * Time.fixedDeltaTime);
     }
 

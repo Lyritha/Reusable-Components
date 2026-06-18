@@ -14,7 +14,7 @@ namespace Lyrith.Navigation
 
         public NavWaypoint this[int i] => Waypoints[i];
 
-        public bool HasReachedEnd(Vector3 currentPosition, float threshold = 0.1f)
+        public bool HasReachedEnd(Vector3 currentPosition, float threshold = 0.4f)
         {
             if (!HasValidPath) return false;
             if (Waypoints == null || Waypoints.Length == 0) return true;

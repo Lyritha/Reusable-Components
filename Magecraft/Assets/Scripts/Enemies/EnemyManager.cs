@@ -4,6 +4,11 @@ using Random = UnityEngine.Random;
 
 public class EnemyManager : Singleton<EnemyManager>
 {
+    [SerializeField]
+    private int minEnemies = 1;
+    [SerializeField]
+    private int maxEnemies = 10;
+
     // Static hooks
     public static event Action OnAllEnemiesDefeated;
     public static event Action<int> OnEnemyCountChanged;
@@ -23,7 +28,7 @@ public class EnemyManager : Singleton<EnemyManager>
 
         foreach (EnemySpawner spawner in spawners)
         {
-            int randomEnemyCount = Random.Range(1, 4);
+            int randomEnemyCount = Random.Range(minEnemies, maxEnemies);
             spawnedEnemies += randomEnemyCount;
 
             spawner.Spawn(randomEnemyCount);

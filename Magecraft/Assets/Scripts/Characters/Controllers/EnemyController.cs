@@ -1,128 +1,110 @@
-using System;
+using Lyrith.Navigation;
 using UnityEngine;
 using UnityEngine.AI;
-using Random = UnityEngine.Random;
 
-[RequireComponent(typeof(NavMeshAgent))]
 public class EnemyController : EntityController
 {
-    private NavMeshAgent agent;
+    [SerializeField] private NavAgentPathfinder agent;
 
-    private Vector3 targetPosition;
-    private float nextPositionTimer = 0f;
+    private float elapsed = 0.0f;
 
-    private float range = 10f;
+    private void OnEnable() => agent.RegisterNavAgentObstacle(transform.position);
+    private void OnDisable() => agent.DeregisterNavAgentObstacle();
+    private void Start() => elapsed = 0.0f;
 
-    protected override void Awake()
+    public float distanceCursor;
+    public Vector3 targetPosition = Vector3.zero;
+    public bool hasTarget = false;
+
+    // Progress tracking
+    private Vector3 lastCheckedPosition;
+    private float progressCheckElapsed = 0f;
+    private const float ProgressCheckInterval = 2f;
+    private const float MinProgressDistance = 0.5f;
+
+    void Update()
     {
-        base.Awake();
+        elapsed += Time.deltaTime;
+        progressCheckElapsed += Time.deltaTime;
 
-        agent = GetComponent<NavMeshAgent>();
-
-        agent.updatePosition = false;
-        agent.updateRotation = false;
-        agent.updateUpAxis = false;
-    }
-
-    private void Start()
-    {
-        GetNewPosition();
-    }
-
-    private void Update()
-    {
-        if (HasReachedPathEnd())
+        // Progress check
+        if (progressCheckElapsed >= ProgressCheckInterval)
         {
-            LookDelta.Raise(Vector2.zero, ActiveLayer);
-            Move.Raise(Vector2.zero, ActiveLayer);
-            GetNewPosition();
+            progressCheckElapsed = 0f;
+
+            float distanceMoved = Vector3.Distance(transform.position, lastCheckedPosition);
+            if (hasTarget && distanceMoved < MinProgressDistance) hasTarget = false; // stalled — force new target
+
+            lastCheckedPosition = transform.position;
         }
-        else
+
+        if (elapsed < 0.1f) return;
+        elapsed -= 0.1f;
+
+        if (agent.Path.HasReachedEnd(transform.position) || !hasTarget)
         {
-            HandleLook();
-            HandleMovement();
-        }
-    }
+            hasTarget = false;
 
-    private void GetNewPosition()
-    {
-        if ((nextPositionTimer -= Time.deltaTime) > 0) return;
-
-        for (int i = 0; i < 10; i++)
-        {
-            Vector3 randomOffset = new(
-                Random.Range(-range, range),
-                10,
-                Random.Range(-range, range)
-            );
-
-            Vector3 desired = transform.position + randomOffset;
-
-            if (!NavMesh.SamplePosition(desired, out NavMeshHit hit, 12f, NavMesh.AllAreas))
-                continue;
-
-            NavMeshPath path = new();
-            if (!NavMesh.CalculatePath(transform.position, hit.position, NavMesh.AllAreas, path))
-                continue;
-
-            if (path.status == NavMeshPathStatus.PathComplete)
+            const int maxAttempts = 10;
+            for (int i = 0; i < maxAttempts; i++)
             {
-                targetPosition = hit.position;
-                agent.SetDestination(targetPosition);
-                nextPositionTimer = Random.Range(1f, 3f);
-                return;
+                Vector2 randomCircle = Random.insideUnitCircle * 20f;
+                Vector3 candidate = transform.position + new Vector3(randomCircle.x, 0f, randomCircle.y);
+
+                if (NavMesh.SamplePosition(candidate, out NavMeshHit hit, 5f, NavMesh.AllAreas))
+                {
+                    targetPosition = hit.position;
+                    hasTarget = true;
+                    lastCheckedPosition = transform.position; // reset baseline on new target
+                    break;
+                }
             }
         }
 
-        nextPositionTimer = 0.5f;
+        agent.TrySetPath(transform.position, targetPosition);
     }
 
-    private void HandleMovement()
+    void FixedUpdate()
     {
-        if (agent.pathPending)
-        {
-            Move.Raise(Vector2.zero, ActiveLayer);
-            return;
-        }
+        if (!agent.Path.HasValidPath || !hasTarget) return;
 
-        Vector3 worldDir = (agent.steeringTarget - transform.position).normalized;
+        HandleWalking();
+        HandleLooking(1);
 
-        Vector3 localDir = transform.InverseTransformDirection(worldDir);
-        Vector2 moveDir = new(localDir.x, localDir.z);
-
-        Move.Raise(moveDir.normalized, ActiveLayer);
+        if (IsCloseToTarget()) distanceCursor += agent.SampleDistance;
+        agent.UpdateNavAgentObstacle(transform.position);
     }
 
-    private void HandleLook()
+    private void HandleWalking()
     {
-        if (agent.pathPending)
-        {
-            LookDelta.Raise(Vector2.zero, ActiveLayer);
-            return;
-        }
-
-        Vector3 toTarget = agent.steeringTarget - transform.position;
-        toTarget.y = 0;
-
-        float desiredYaw = Quaternion.LookRotation(toTarget).eulerAngles.y;
-        float currentYaw = transform.eulerAngles.y;
-
-        float deltaYaw = Mathf.DeltaAngle(currentYaw, desiredYaw) * 0.25f;
-
-        LookDelta.Raise(new Vector2(deltaYaw, 0), ActiveLayer);
+        Vector3 normalizedDirection = (agent.Path.GetPositionAtDistance(distanceCursor) - transform.position).normalized;
+        Vector2 localDirection = new(Vector3.Dot(transform.right, normalizedDirection), Vector3.Dot(transform.forward, normalizedDirection));
+        Move.Raise(localDirection, ActiveLayer);
     }
 
-    private bool HasReachedPathEnd()
+    private void HandleLooking(float lookAhead = 1f)
     {
-        return !agent.hasPath || agent.remainingDistance <= agent.stoppingDistance;
+        Vector3 normalizedDirection = (agent.Path.GetPositionAtDistance(distanceCursor + lookAhead) - transform.position).normalized;
+        float targetAngle = Mathf.Atan2(normalizedDirection.x, normalizedDirection.z) * Mathf.Rad2Deg;
+        Vector2 lookDelta = new(Mathf.DeltaAngle(transform.eulerAngles.y, targetAngle), 0f);
+        LookDelta.Raise(lookDelta, ActiveLayer);
     }
+
+    private bool IsCloseToTarget() => (agent.Path.GetPositionAtDistance(distanceCursor) - transform.position).sqrMagnitude < 0.0025f;
 
     private void OnDrawGizmos()
     {
-        if (Application.isPlaying)
+        if (agent == null || agent.Path == null || !agent.Path.HasValidPath) return;
+        Gizmos.color = Color.yellow;
+
+        NavPath path = agent.Path;
+        for (int i = 0; i < agent.Path.Length - 1; i++)
         {
-            Gizmos.color = Color.red;
-            Gizmos.DrawSphere(targetPosition, 0.2f);
+            Gizmos.DrawLine(path[i], path[i + 1]);
+            Gizmos.DrawSphere(path[i], 0.1f);
         }
+
+        Gizmos.color = Color.green;
+        Gizmos.DrawSphere(path[^1], 0.5f);
     }
 }
