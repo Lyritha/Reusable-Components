@@ -1,0 +1,16 @@
+{
+    "name": "Lyrith.Inspector.Fold",
+    "rootNamespace": "Lyrith.Inspector.Fold",
+    "references": [
+        "GUID:57301241550591244bbea126fed4acea"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

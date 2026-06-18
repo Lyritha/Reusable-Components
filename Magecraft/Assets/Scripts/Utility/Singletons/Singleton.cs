@@ -1,4 +1,4 @@
-using Lyrith.Utility.Fold;
+using Lyrith.Inspector.Fold;
 using UnityEngine;
 
 [Fold("Singleton")]

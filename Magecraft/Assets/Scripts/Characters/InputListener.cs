@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Lyrith.Utility.Fold;
+using Lyrith.Inspector.Fold;
+using Lyrith.Inspector.ShowOnly;
 
 /// <summary>
 /// Base class for components that subscribe to events on an EntityController.

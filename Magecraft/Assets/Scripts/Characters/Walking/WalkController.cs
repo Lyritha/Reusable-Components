@@ -1,5 +1,5 @@
 using UnityEngine;
-using Lyrith.Utility.Fold;
+using Lyrith.Inspector.ShowOnly;
 
 [RequireComponent(typeof(Rigidbody))]
 public class WalkController : InputListener

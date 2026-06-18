@@ -1,4 +1,5 @@
-﻿using Lyrith.Utility.Fold;
+﻿using Lyrith.Inspector.Fold;
+using Lyrith.Inspector.ShowOnly;
 using System;
 using System.Collections;
 using System.Collections.Generic;

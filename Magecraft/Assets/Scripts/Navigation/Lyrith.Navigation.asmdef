@@ -1,0 +1,17 @@
+{
+    "name": "Lyrith.Navigation",
+    "rootNamespace": "Lyrith.Navigation",
+    "references": [
+        "GUID:5c246a893412d6243bb2957d69dbe654",
+        "GUID:9c4bb29bd885d9e4cb9d42db79099e7d"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
