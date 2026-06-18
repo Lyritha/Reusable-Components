@@ -915,7 +915,7 @@ GameObject:
   - component: {fileID: 122658547}
   - component: {fileID: 122658546}
   - component: {fileID: 122658545}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: EnemySpawner (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13365,7 +13365,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: '::'
   raycastLayerMask:
     serializedVersion: 2
-    m_Bits: 247
+    m_Bits: 499
 --- !u!114 &759012346
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15878,8 +15878,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::EnemyManager
   persistentInstance: 0
   removeWholeObject: 1
-  minEnemies: 50
-  maxEnemies: 100
+  minEnemies: 2
+  maxEnemies: 5
 --- !u!4 &1265606813
 Transform:
   m_ObjectHideFlags: 0
@@ -21444,7 +21444,7 @@ GameObject:
   - component: {fileID: 1479615941}
   - component: {fileID: 1479615943}
   - component: {fileID: 1479615942}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: EnemySpawner (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21805,7 +21805,7 @@ GameObject:
   - component: {fileID: 1577402006}
   - component: {fileID: 1577402008}
   - component: {fileID: 1577402007}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: EnemySpawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21864,7 +21864,7 @@ MonoBehaviour:
   persistentInstance: 0
   forcedId: -1
   Id: 0
-  enemyPrefab: {fileID: 8320320321271967577, guid: e440e37d5557dac46bda5bc4deaf4dd4, type: 3}
+  enemyPrefab: {fileID: 8320320321271967577, guid: c2fd9284ec3826e4c8a821946fc9b315, type: 3}
   enemyRadius: 0.5
   maxAttemptsPerEnemy: 20
   retryDelay: 0.2
@@ -25211,7 +25211,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2033014486}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: EnemySpawners
   m_TagString: Untagged
   m_Icon: {fileID: 0}

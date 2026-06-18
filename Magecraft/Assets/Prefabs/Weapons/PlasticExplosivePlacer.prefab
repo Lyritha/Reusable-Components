@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 159467998027347845}
   - component: {fileID: 291567880572322637}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: PlasticExplosivePlacer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59,7 +59,7 @@ GameObject:
   - component: {fileID: 3685595978931366232}
   - component: {fileID: 3718412875910948035}
   - component: {fileID: 6458451744322924769}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Model (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -150,7 +150,7 @@ GameObject:
   - component: {fileID: 8575235068053215791}
   - component: {fileID: 4175964791894150171}
   - component: {fileID: 2506792576182801733}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Model (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

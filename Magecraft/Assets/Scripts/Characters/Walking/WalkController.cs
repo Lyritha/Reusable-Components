@@ -57,7 +57,7 @@ public class WalkController : InputListener
         }
 
         float speed = targetVel.magnitude > currentVel.magnitude ? accel : decell; 
-        return Vector2.MoveTowards(currentVel, targetVel, accel * Time.fixedDeltaTime);
+        return Vector2.MoveTowards(currentVel, targetVel, speed * Time.fixedDeltaTime);
     }
 
     public Movement4 MaxSpeed { get { return maxSpeed; } }

@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 159467998027347845}
   - component: {fileID: 9213902791972561374}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Uzi
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,7 +50,7 @@ MonoBehaviour:
   entity: {fileID: 0}
   rayMask:
     serializedVersion: 2
-    m_Bits: 247
+    m_Bits: 499
   bulletHitVfx: {fileID: 3437918817745226434, guid: 684b8856199a9824fb57ce1a7151eea0, type: 3}
 --- !u!1 &2189983562922632616
 GameObject:
@@ -64,7 +64,7 @@ GameObject:
   - component: {fileID: 653438493771448758}
   - component: {fileID: 4558495145548152061}
   - component: {fileID: 6266779779785045401}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -176,7 +176,7 @@ GameObject:
   - component: {fileID: 3875471885802451074}
   - component: {fileID: 366082525570127706}
   - component: {fileID: 8728766373274427842}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Model (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -288,7 +288,7 @@ GameObject:
   - component: {fileID: 199709934613691224}
   - component: {fileID: 2852288688248734857}
   - component: {fileID: 404231425634872455}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Model (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

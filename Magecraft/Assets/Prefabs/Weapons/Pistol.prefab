@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 159467998027347845}
   - component: {fileID: 1671081311965512005}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Pistol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -49,7 +49,7 @@ MonoBehaviour:
   entity: {fileID: 0}
   rayMask:
     serializedVersion: 2
-    m_Bits: 247
+    m_Bits: 499
   bulletHitVfx: {fileID: 3437918817745226434, guid: 684b8856199a9824fb57ce1a7151eea0, type: 3}
 --- !u!1 &6343190231402248779
 GameObject:
@@ -63,7 +63,7 @@ GameObject:
   - component: {fileID: 5571439893629384659}
   - component: {fileID: 7382817547876356078}
   - component: {fileID: 7420077392002895024}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Model (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175,7 +175,7 @@ GameObject:
   - component: {fileID: 6767908225763600564}
   - component: {fileID: 6077430449487484672}
   - component: {fileID: 7966696936949543178}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}

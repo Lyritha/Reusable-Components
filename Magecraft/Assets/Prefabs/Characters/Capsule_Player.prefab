@@ -940,7 +940,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::CinemachineCullingMask
   targetCullingMask:
     serializedVersion: 2
-    m_Bits: 247
+    m_Bits: 1015
 --- !u!114 &7020214310988131400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -992,7 +992,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4094582246641756382}
   - component: {fileID: 5778587224720690456}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Cameras
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1108,6 +1108,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AnimatedWalkController
   entity: {fileID: 0}
   acceleration: 5
+  decceleration: 15
   maxSpeed:
     forward: 3
     backward: 2
