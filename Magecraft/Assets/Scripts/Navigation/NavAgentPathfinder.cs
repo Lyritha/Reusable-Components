@@ -19,18 +19,21 @@ namespace Lyrith.Navigation
         [SerializeField, DynamicDropdown(nameof(GetAgentIDNamePairs))]
         private int agent = 0;
 
-        [Header("Path settings"), SerializeField, Tooltip("Desired clearance from walls when pushing path points away from them.")]
+        [SerializeField, Tooltip("Desired clearance from walls when pushing path points away from them.")]
         private float wallClearance = 2f;
+        [SerializeField, Tooltip("Desired clearance from obstacles (other navAgents) when pushing path points away from them.")]
+        private float obstacleClearance = 0.1f;
         [SerializeField, Tooltip("Points closer together than this may be merged during cleanup.")]
         private float mergeDistance = 1f;
         [SerializeField, Tooltip("Spacing between sample points.")]
         private float sampleDistance = 0.25f;
-        [SerializeField, Tooltip("Points closer together than this may be merged during cleanup.")]
+        [SerializeField, Tooltip("Maximum points from start that will be re-sampled")]
         private int sampleDepth = 1;
 
         // public access to serialized values
         public int AgentTypeID => agent;
         public float WallClearance => wallClearance;
+        public float ObstacleClearance => obstacleClearance;
         public float MergeDistance => mergeDistance;
         public float SampleDistance => sampleDistance;
         public int SampleDepth => sampleDepth;
@@ -58,7 +61,7 @@ namespace Lyrith.Navigation
                     .PushAwayFromWalls(wallClearance)
                     .Clean(mergeDistance)
                     .SmoothResample(sampleDistance, sampleDepth)
-                    .PushAwayFromObstacles(navAgentObstacles, selfID)
+                    .PushAwayFromObstacles(navAgentObstacles, selfID, obstacleClearance)
                     .Build();
             }
             else

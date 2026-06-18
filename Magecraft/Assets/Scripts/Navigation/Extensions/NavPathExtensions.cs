@@ -162,7 +162,7 @@ namespace Lyrith.Navigation
 
             return outPts;
         }
-        public static List<Vector3> PushAwayFromObstacles(this List<Vector3> pts, List<NavAgentObstacle> obstacles, int selfID, float snapRadius = 0.3f)
+        public static List<Vector3> PushAwayFromObstacles(this List<Vector3> pts, List<NavAgentObstacle> obstacles, int selfID, float spacingDistance = 0.1f, float snapRadius = 0.3f)
         {
             if (pts == null || pts.Count == 0 || selfID < 0) return pts;
 
@@ -172,7 +172,7 @@ namespace Lyrith.Navigation
             for (int i = 1; i < pts.Count - 1; i++)
             {
                 Vector3 prev = outPts[i - 1];
-                Vector3 pushed = TryPushFromObstacles(pts[i], obstacles, selfID, snapRadius);
+                Vector3 pushed = TryPushFromObstacles(pts[i], obstacles, selfID, spacingDistance, snapRadius);
 
                 outPts.Add(HasClearCorridor(prev, pushed) ? pushed : pts[i]);
             }
@@ -206,20 +206,21 @@ namespace Lyrith.Navigation
 
             return p;
         }
-        private static Vector3 TryPushFromObstacles(Vector3 p, List<NavAgentObstacle> obstacles, int selfID, float snapRadius)
+        private static Vector3 TryPushFromObstacles(Vector3 p, List<NavAgentObstacle> obstacles, int selfID, float spacingDistance, float snapRadius)
         {
             Vector3 adjusted = p;
 
-            foreach (var obs in obstacles)
+            foreach (NavAgentObstacle obs in obstacles)
             {
                 if (obs.id == selfID) continue;
 
                 Vector3 dir = adjusted - obs.position;
                 float dist = dir.magnitude;
 
-                if (dist < obs.radius && dist > 0.001f)
+                float adjustedRadius = obs.radius + spacingDistance;
+                if (dist < adjustedRadius && dist > 0.001f)
                 {
-                    float push = obs.radius - dist;
+                    float push = adjustedRadius - dist;
                     adjusted += dir.normalized * push;
                 }
             }
