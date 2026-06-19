@@ -1,2 +1,2 @@
 # Portfolio
-https://lyrith.dev/?page=main&section=about
+https://lyrith.dev/?page=MagecraftWIP&section=about

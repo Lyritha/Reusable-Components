@@ -29,11 +29,15 @@ public class EnemyManager : Singleton<EnemyManager>
         foreach (EnemySpawner spawner in spawners)
         {
             int randomEnemyCount = Random.Range(minEnemies, maxEnemies);
-            spawnedEnemies += randomEnemyCount;
-
             spawner.Spawn(randomEnemyCount);
             OnEnemyCountChanged?.Invoke(spawnedEnemies);
         }
+    }
+
+    public void AddEnemy()
+    {
+        spawnedEnemies++;
+        OnEnemyCountChanged?.Invoke(spawnedEnemies);
     }
 
     public void RemoveEnemy()
