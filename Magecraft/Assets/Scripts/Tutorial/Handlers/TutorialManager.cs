@@ -62,11 +62,14 @@ public class TutorialManager : Singleton<TutorialManager>
         CompleteTutorial();
     }
 
-    private void CompleteTutorial()
+    [ContextMenu("finish tut")]
+    public void CompleteTutorial()
     {
         Cleanup();
         hasTutorialFinished = true;
         OnTutorialCompleted?.Invoke();
+
+        if (EnemyManager.Instance != null) EnemyManager.Instance.TriggerWave();
     }
 
     private void Cleanup()

@@ -26,7 +26,7 @@ public abstract class EntityController : SingletonGroup<EntityController>
     public LayerItem Jump = new() { layers = {Layer.Movement } };
     public LayerItem Interact = new() { layers = {Layer.Movement } };
     public LayerItem Tab = new() { layers = {Layer.Movement } };
-    public LayerItem Inventory = new() { layers = {Layer.Movement, Layer.UI } };
+    public LayerItem InventoryButton = new() { layers = {Layer.Movement, Layer.UI } };
 
 #pragma warning restore CS0067
 

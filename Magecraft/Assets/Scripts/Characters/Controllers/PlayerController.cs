@@ -71,7 +71,7 @@ public class PlayerController : EntityController
     private void OnAttackInput(CallbackContext ctx) => PrimaryMouse.Raise(GetBool(ctx), ActiveLayer);
     private void OnSecondaryAttackInput(CallbackContext ctx) => SecondaryMouse.Raise(GetBool(ctx), ActiveLayer);
     private void OnInteractInput(CallbackContext ctx) => Interact.Raise(ActiveLayer);
-    private void OnInventoryInput(CallbackContext ctx) => Inventory.Raise(ActiveLayer);
+    private void OnInventoryInput(CallbackContext ctx) => InventoryButton.Raise(ActiveLayer);
     private void OnTabInput(CallbackContext ctx) => Tab.Raise(ActiveLayer);
     private void OnNumberSelectedInput(CallbackContext ctx) => NumberSelected.Raise(GetNumber(ctx), ActiveLayer);
     private void OnScroll(CallbackContext ctx) => Scroll.Raise((int)GetFloat(ctx), ActiveLayer);

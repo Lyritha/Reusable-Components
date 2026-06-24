@@ -5,11 +5,11 @@ using System.Linq;
 
 public class ShowButtonPrompt : MonoBehaviour
 {
-    [Header("Input Action")]
-    public InputActionReference action;
+    [SerializeField]
+    private PlayerInput input;
 
-    [Header("UI")]
-    public TMP_Text text;
+    [Header("UI"), SerializeField]
+    private TMP_Text text;
 
     private void OnEnable()
     {
@@ -24,7 +24,7 @@ public class ShowButtonPrompt : MonoBehaviour
 
     private void UpdatePrompt()
     {
-        if (action == null || action.action == null) return;
-        text.text = string.Join(", ", InputDeviceTracker.GetNamesLastDevice(action, true));
+        if (input == null || input.Action == null) return;
+        text.text = string.Join(", ", InputDeviceTracker.GetNamesLastDevice(input.Action, true));
     }
 }

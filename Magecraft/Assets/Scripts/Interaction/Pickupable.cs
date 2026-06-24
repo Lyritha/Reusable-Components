@@ -1,23 +1,44 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
-public class Pickupable : InputListener
+public class Pickupable : MonoBehaviour
 {
+    [SerializeField]
+    private PlayerInput input;
+
     [SerializeField]
     private ScriptableItem item;
     [SerializeField]
     private int amount;
+
+    [SerializeField]
+    private Image icon;
+    [SerializeField]
+    private TMP_Text title;
 
     public UnityEvent OnPickup;
     private bool hasBeenPickedUp = false;
 
     private void Awake()
     {
-        AddSubscription(
-            entity => entity.Interact.OnEvent += OnInteract,
-            entity => entity.Interact.OnEvent -= OnInteract
-        );
+        if (item != null)
+        {
+            icon.sprite = item.Icon;
+            title.text = $"Collect {amount} {item.Name}";
+        }
+    }
+
+    private void OnEnable()
+    {
+        input.OnPerformed += OnInteract;
+    }
+
+    private void OnDisable()
+    {
+        input.OnPerformed -= OnInteract;
     }
 
 
@@ -26,15 +47,10 @@ public class Pickupable : InputListener
     {
         if (hasBeenPickedUp) return;
 
-        uint id = entity.InstanceId;
-
-        Debug.Log($"finding inventory with id: {id}");
         if (Inventory.Instance != null)
         {
-            Debug.Log("found inventory");
-
             hasBeenPickedUp = true;
-            Inventory.Instance.InventoryPouch.AddItems(item, amount);
+            Inventory.Instance.Items.AddItems(item, amount, item.type);
             OnPickup?.Invoke();
         }
     }

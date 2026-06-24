@@ -17,11 +17,6 @@ public class EnemyManager : Singleton<EnemyManager>
 
     private int spawnedEnemies = 0;
 
-    private void OnEnable() => EnemySpawner.AllInstancesReady += TriggerWave;
-    private void OnDisable() => EnemySpawner.AllInstancesReady -= TriggerWave;
-
-
-    [ContextMenu("start")]
     public void TriggerWave()
     {
         spawners = EnemySpawner.AllInstances;

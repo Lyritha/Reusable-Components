@@ -47,7 +47,7 @@ public class BridgeController : EntityController
 
         Tab.SetSource(parent.Tab);
         NumberSelected.SetSource(parent.NumberSelected);
-        Inventory.SetSource(parent.Inventory);
+        InventoryButton.SetSource(parent.InventoryButton);
 
         // auto-disconnect if parent is destroyed
         _parentDestroyedHandler = () => DisconnectFromController();
@@ -77,7 +77,7 @@ public class BridgeController : EntityController
 
         Tab.SetSource(null);
         NumberSelected.SetSource(null);
-        Inventory.SetSource(null);
+        InventoryButton.SetSource(null);
 
         parent = null;
     }

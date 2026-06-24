@@ -9,7 +9,7 @@ public class ShowInventory : InputListener
 
     private void Awake()
     {
-        AddSubscription(e => e.Inventory.OnEvent += OnInventory, e => e.Inventory.OnEvent -= OnInventory);
+        AddSubscription(e => e.InventoryButton.OnEvent += OnInventory, e => e.InventoryButton.OnEvent -= OnInventory);
     }
 
     private void OnInventory()
